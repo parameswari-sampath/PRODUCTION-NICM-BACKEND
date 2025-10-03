@@ -53,6 +53,10 @@ func main() {
 	students.Put("/:id", handlers.UpdateStudentFiber)
 	students.Delete("/:id", handlers.DeleteStudentFiber)
 
+	// Admin endpoints
+	admin := api.Group("/admin")
+	admin.Post("/reset-db", handlers.ResetDatabaseHandler)
+
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {
 		return c.SendString("OK")

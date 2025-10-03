@@ -44,6 +44,15 @@ STUDENT ENDPOINTS
    Response (duplicates): {"message": "Some students were not created...", "success": 150, "failed": 3, "duplicates": [...]}
 
 ===========================================
+ADMIN ENDPOINTS
+===========================================
+
+7. RESET DATABASE (DROP ALL TABLES & RE-RUN MIGRATIONS)
+   POST /api/admin/reset-db
+   WARNING: This deletes ALL data permanently!
+   Response: {"message": "Database reset successfully", "status": "All tables dropped and migrations re-run"}
+
+===========================================
 HEALTH CHECK
 ===========================================
 
