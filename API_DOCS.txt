@@ -1,0 +1,74 @@
+MCQ EXAM API DOCUMENTATION
+
+Framework: Fiber v2
+Database: PostgreSQL with pgx driver
+Connection Pool: 25 max, 5 min connections
+Migrations: Automatic on startup
+
+BASE URL: http://localhost:8080
+
+===========================================
+STUDENT ENDPOINTS
+===========================================
+
+1. CREATE STUDENT
+   POST /api/students
+   Body: {"name": "John Doe", "email": "john@example.com"}
+   Response: {"id": 1, "name": "John Doe", "email": "john@example.com", "created_at": "...", "updated_at": "..."}
+
+2. GET ALL STUDENTS (with pagination)
+   GET /api/students?limit=10&offset=0
+   Query params: limit (default 100, max 1000), offset (default 0)
+   Response: {"students": [...], "total": 1375, "limit": 10, "offset": 0, "count": 10}
+   - "total": total students in database
+   - "count": students returned in this page
+
+3. GET STUDENT BY ID
+   GET /api/students/1
+   Response: {"id": 1, "name": "John Doe", "email": "john@example.com", "created_at": "...", "updated_at": "..."}
+
+4. UPDATE STUDENT
+   PUT /api/students/1
+   Body: {"name": "Jane Doe", "email": "jane@example.com"}
+   Response: {"id": 1, "name": "Jane Doe", "email": "jane@example.com", "created_at": "...", "updated_at": "..."}
+
+5. DELETE STUDENT
+   DELETE /api/students/1
+   Response: 204 No Content
+
+6. BULK CREATE STUDENTS
+   POST /api/students/bulk
+   Max: 2000 students per request, 30 second timeout
+   Body: {"students": [{"name": "John Doe", "email": "john@example.com"}, {"name": "Jane Doe", "email": "jane@example.com"}]}
+   Response (success): {"message": "Students created successfully", "count": 2}
+   Response (duplicates): {"message": "Some students were not created...", "success": 150, "failed": 3, "duplicates": [...]}
+
+===========================================
+HEALTH CHECK
+===========================================
+
+GET /health
+Response: OK
+
+===========================================
+DATABASE MIGRATIONS
+===========================================
+
+Migrations run automatically on server start
+Location: migrations/
+Current migrations:
+- 000001_create_students_table.up.sql
+- 000001_create_students_table.down.sql
+- 000002_add_unique_email_constraint.up.sql (EMAIL UNIQUE)
+- 000002_add_unique_email_constraint.down.sql
+
+Note: Email is UNIQUE. Duplicate emails return 409 Conflict error
+
+===========================================
+RUN SERVER
+===========================================
+
+go run main.go
+
+Server runs on port 8080 (or PORT env variable)
+Includes: CORS (allow all), Logger, Recovery middleware
