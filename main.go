@@ -62,6 +62,7 @@ func main() {
 	mail.Post("/send", handlers.SendEmailHandler)
 	mail.Post("/send-all", handlers.SendAllEmailsHandler)
 	mail.Get("/stats", handlers.GetEmailStatsHandler)
+	mail.Get("/search", handlers.SearchEmailHandler)
 
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {

@@ -87,6 +87,12 @@ MAIL ENDPOINTS
    Response: {"total_emails": 1378}
    Returns total number of email addresses in students database
 
+11. SEARCH EMAIL
+   GET /api/mail/search?email=test@example.com
+   Response (found): {"email": "test@example.com"}
+   Response (not found): {"error": "Email not found"}
+   Checks if email exists in students database
+
 ===========================================
 HEALTH CHECK
 ===========================================
