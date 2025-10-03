@@ -53,6 +53,41 @@ ADMIN ENDPOINTS
    Response: {"message": "Database reset successfully", "status": "All tables dropped and migrations re-run"}
 
 ===========================================
+MAIL ENDPOINTS
+===========================================
+
+8. SEND EMAIL (Single)
+   POST /api/mail/send
+   Body: {
+     "to_email": "keerthana@meikuraledutech.in",
+     "to_name": "Keerthana",
+     "subject": "Test Email",
+     "html_body": "<div><b>Test email sent successfully.</b></div>"
+   }
+   Response: {"message": "Email sent successfully", "to": "keerthana@meikuraledutech.in", "subject": "Test Email", "request_id": "..."}
+
+9. SEND EMAIL TO ALL STUDENTS (Personalized)
+   POST /api/mail/send-all
+   Body: {
+     "subject": "Exam Invitation",
+     "html_body": "<div>Dear {{name}},<br><br>You are invited to the exam...</div>"
+   }
+   Note: {{name}} will be replaced with each student's name
+   Response: {
+     "message": "Email sending completed",
+     "total": 1378,
+     "sent": 1375,
+     "failed": 3,
+     "failed_emails": ["email1@...", "email2@..."]
+   }
+   All emails are logged in email_logs table with ZeptoMail response tracking
+
+10. GET EMAIL COUNT
+   GET /api/mail/stats
+   Response: {"total_emails": 1378}
+   Returns total number of email addresses in students database
+
+===========================================
 HEALTH CHECK
 ===========================================
 

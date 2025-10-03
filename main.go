@@ -57,6 +57,12 @@ func main() {
 	admin := api.Group("/admin")
 	admin.Post("/reset-db", handlers.ResetDatabaseHandler)
 
+	// Mail endpoints
+	mail := api.Group("/mail")
+	mail.Post("/send", handlers.SendEmailHandler)
+	mail.Post("/send-all", handlers.SendAllEmailsHandler)
+	mail.Get("/stats", handlers.GetEmailStatsHandler)
+
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {
 		return c.SendString("OK")
