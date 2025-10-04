@@ -113,8 +113,6 @@ func SendAllEmailsHandler(c *fiber.Ctx) error {
 
 	// Send emails to all students
 	sentCount := 0
-	failedCount := 0
-	var failedEmails []string
 
 	for _, student := range students {
 		// Personalize email by replacing {{name}}
@@ -130,18 +128,13 @@ func SendAllEmailsHandler(c *fiber.Ctx) error {
 
 		zeptoResp, err := utils.SendEmail(params)
 
-		// Prepare log entry
+		// All emails marked as "sent" initially
+		// Webhook will update to "bounced" if delivery fails
 		status := "sent"
-		var requestID, responseCode, responseMessage, errorMessage *string
+		var requestID, responseCode, responseMessage *string
 		var zeptoResponseJSON *string
 
-		if err != nil {
-			status = "failed"
-			errMsg := err.Error()
-			errorMessage = &errMsg
-			failedCount++
-			failedEmails = append(failedEmails, student.Email)
-		} else {
+		if err == nil {
 			sentCount++
 			requestID = &zeptoResp.RequestID
 			if len(zeptoResp.Data) > 0 {
@@ -154,27 +147,20 @@ func SendAllEmailsHandler(c *fiber.Ctx) error {
 			zeptoResponseJSON = &jsonStr
 		}
 
-		// Log to database
+		// Log to database (even if API call failed, log for tracking)
 		logQuery := `
-			INSERT INTO email_logs (student_id, email, subject, status, request_id, response_code, response_message, zepto_response, error_message, sent_at)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW())
+			INSERT INTO email_logs (student_id, email, subject, status, request_id, response_code, response_message, zepto_response, sent_at)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW())
 		`
-		_, _ = db.Pool.Exec(context.Background(), logQuery, student.ID, student.Email, req.Subject, status, requestID, responseCode, responseMessage, zeptoResponseJSON, errorMessage)
+		_, _ = db.Pool.Exec(context.Background(), logQuery, student.ID, student.Email, req.Subject, status, requestID, responseCode, responseMessage, zeptoResponseJSON)
 
 		// Small delay to avoid rate limiting
 		time.Sleep(100 * time.Millisecond)
 	}
 
-	response := fiber.Map{
-		"message":      "Email sending completed",
-		"total":        len(students),
-		"sent":         sentCount,
-		"failed":       failedCount,
-	}
-
-	if failedCount > 0 {
-		response["failed_emails"] = failedEmails
-	}
-
-	return c.JSON(response)
+	return c.JSON(fiber.Map{
+		"message": "All emails sent successfully",
+		"total":   len(students),
+		"sent":    sentCount,
+	})
 }

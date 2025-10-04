@@ -74,13 +74,12 @@ MAIL ENDPOINTS
    }
    Note: {{name}} will be replaced with each student's name
    Response: {
-     "message": "Email sending completed",
+     "message": "All emails sent successfully",
      "total": 1378,
-     "sent": 1375,
-     "failed": 3,
-     "failed_emails": ["email1@...", "email2@..."]
+     "sent": 1378
    }
    All emails are logged in email_logs table with ZeptoMail response tracking
+   All emails marked as "sent" initially. Webhooks will update status to "bounced" if delivery fails.
 
 10. GET EMAIL COUNT
    GET /api/mail/stats
@@ -92,6 +91,51 @@ MAIL ENDPOINTS
    Response (found): {"email": "test@example.com"}
    Response (not found): {"error": "Email not found"}
    Checks if email exists in students database
+
+12. GET EMAIL LOGS
+   GET /api/mail/logs?status=sent
+   Query params: status (default: sent, options: sent, bounced, failed)
+
+   Examples:
+   curl "http://localhost:8080/api/mail/logs"                    # Default: sent emails
+   curl "http://localhost:8080/api/mail/logs?status=sent"       # Sent emails
+   curl "http://localhost:8080/api/mail/logs?status=failed"     # Failed emails (no request_id)
+   curl "http://localhost:8080/api/mail/logs?status=bounced"    # Bounced emails
+
+   Response: {
+     "count": 3,
+     "logs": [
+       {
+         "id": 1,
+         "student_id": 1,
+         "email": "test@example.com",
+         "subject": "Test Email",
+         "status": "sent",
+         "request_id": "2518b...",
+         "response_code": "EM_104",
+         "response_message": "Email request received",
+         "sent_at": "2025-10-04T10:00:00Z"
+       }
+     ]
+   }
+   Returns up to 1000 email logs filtered by status
+   Note: "failed" status is set by webhook when ZeptoMail reports bounce/delivery failure
+
+===========================================
+WEBHOOK ENDPOINTS
+===========================================
+
+13. ZEPTOMAIL WEBHOOK (Bounce Notifications)
+   POST /api/webhooks/zeptomail
+   Unauthenticated endpoint for ZeptoMail bounce notifications
+
+   Receives bounce events and updates email status from "sent" to "failed"
+   Uses request_id from webhook payload to find and update email_logs
+
+   Always returns HTTP 200 (as required by ZeptoMail)
+
+   Configure this URL in ZeptoMail dashboard:
+   https://yourdomain.com/api/webhooks/zeptomail
 
 ===========================================
 HEALTH CHECK

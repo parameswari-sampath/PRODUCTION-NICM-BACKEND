@@ -102,7 +102,7 @@ func SendEmail(params SendEmailParams) (*ZeptoMailResponse, error) {
 	// Read response
 	body, _ := io.ReadAll(resp.Body)
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		return nil, fmt.Errorf("email send failed with status %d: %s", resp.StatusCode, string(body))
 	}
 

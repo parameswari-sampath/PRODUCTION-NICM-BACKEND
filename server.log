@@ -1,0 +1,48 @@
+2025/10/04 11:17:51 Database connection pool initialized (max: 25, min: 5)
+2025/10/04 11:17:53 Migrations completed successfully
+2025/10/04 11:17:53 Server starting on port 8080
+
+ ┌───────────────────────────────────────────────────┐ 
+ │                   MCQ Exam API                    │ 
+ │                   Fiber v2.52.9                   │ 
+ │               http://127.0.0.1:8080               │ 
+ │       (bound on host 0.0.0.0 and port 8080)       │ 
+ │                                                   │ 
+ │ Handlers ............ 23  Processes ........... 1 │ 
+ │ Prefork ....... Disabled  PID ............. 88602 │ 
+ └───────────────────────────────────────────────────┘ 
+
+11:17:58 | 200 |  285.400208ms | 127.0.0.1 | GET | /api/mail/logs | -
+11:17:59 | 200 |      294.17ms | 127.0.0.1 | GET | /api/mail/logs | -
+11:18:08 | 204 |      23.709µs | 127.0.0.1 | OPTIONS | /api/mail/stats | -
+11:18:08 | 204 |      12.708µs | 127.0.0.1 | OPTIONS | /api/mail/logs | -
+11:18:08 | 204 |      17.292µs | 127.0.0.1 | OPTIONS | /api/mail/logs | -
+11:18:08 | 200 |  261.839333ms | 127.0.0.1 | GET | /api/mail/logs | -
+11:18:08 | 200 |  262.061458ms | 127.0.0.1 | GET | /api/mail/stats | -
+11:18:08 | 200 |  263.447292ms | 127.0.0.1 | GET | /api/mail/logs | -
+11:18:21 | 204 |       46.25µs | 127.0.0.1 | OPTIONS | /api/students | -
+11:18:21 | 200 |  452.318166ms | 127.0.0.1 | GET | /api/students | -
+11:18:21 | 200 |  168.820625ms | 127.0.0.1 | GET | /api/students | -
+11:18:23 | 204 |      41.333µs | 127.0.0.1 | OPTIONS | /api/mail/stats | -
+11:18:23 | 204 |       5.375µs | 127.0.0.1 | OPTIONS | /api/mail/logs | -
+11:18:23 | 204 |       5.084µs | 127.0.0.1 | OPTIONS | /api/mail/logs | -
+11:18:23 | 204 |       4.833µs | 127.0.0.1 | OPTIONS | /api/mail/stats | -
+11:18:23 | 204 |       3.084µs | 127.0.0.1 | OPTIONS | /api/mail/logs | -
+11:18:23 | 204 |      21.917µs | 127.0.0.1 | OPTIONS | /api/mail/logs | -
+11:18:23 | 200 |  211.993333ms | 127.0.0.1 | GET | /api/mail/stats | -
+11:18:23 | 200 |   212.71525ms | 127.0.0.1 | GET | /api/mail/logs | -
+11:18:23 | 200 |  216.435375ms | 127.0.0.1 | GET | /api/mail/logs | -
+11:18:23 | 200 |   89.934042ms | 127.0.0.1 | GET | /api/mail/stats | -
+11:18:23 | 200 |   86.387459ms | 127.0.0.1 | GET | /api/mail/logs | -
+11:18:23 | 200 |   90.400458ms | 127.0.0.1 | GET | /api/mail/logs | -
+11:18:30 | 204 |      22.042µs | 127.0.0.1 | OPTIONS | /api/mail/search | -
+11:18:30 | 404 |  291.375542ms | 127.0.0.1 | GET | /api/mail/search | -
+11:18:31 | 204 |      26.875µs | 127.0.0.1 | OPTIONS | /api/mail/search | -
+11:18:31 | 404 |   89.499708ms | 127.0.0.1 | GET | /api/mail/search | -
+11:18:32 | 204 |      35.958µs | 127.0.0.1 | OPTIONS | /api/mail/search | -
+11:18:32 | 404 |  100.174667ms | 127.0.0.1 | GET | /api/mail/search | -
+11:18:33 | 204 |          28µs | 127.0.0.1 | OPTIONS | /api/mail/search | -
+11:18:33 | 404 |  199.907125ms | 127.0.0.1 | GET | /api/mail/search | -
+11:18:35 | 204 |      28.834µs | 127.0.0.1 | OPTIONS | /api/mail/search | -
+11:18:35 | 404 |  173.756792ms | 127.0.0.1 | GET | /api/mail/search | -
+11:18:45 | 200 |  163.633333ms | 127.0.0.1 | GET | /api/mail/logs | -

@@ -63,6 +63,11 @@ func main() {
 	mail.Post("/send-all", handlers.SendAllEmailsHandler)
 	mail.Get("/stats", handlers.GetEmailStatsHandler)
 	mail.Get("/search", handlers.SearchEmailHandler)
+	mail.Get("/logs", handlers.GetEmailLogsHandler)
+
+	// Webhook endpoints
+	webhooks := api.Group("/webhooks")
+	webhooks.Post("/zeptomail", handlers.ZeptoMailWebhookHandler)
 
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {
