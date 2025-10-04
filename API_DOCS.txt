@@ -252,6 +252,47 @@ LIVE API ENDPOINTS
    - Returns YouTube video URL from event_schedule table
    - Token can only be used once
 
+18. VERIFY OTP (Access Code)
+   POST /api/live/verify-otp
+   Body: {
+     "otp": "ABC123"
+   }
+
+   Response (success): {
+     "success": true,
+     "session_id": 1,
+     "email": "john@example.com",
+     "name": "John Doe",
+     "message": "OTP verified successfully"
+   }
+
+   Response (failure - invalid OTP): {
+     "success": false,
+     "message": "Already test completed or invalid OTP"
+   }
+
+   Response (failure - test not started): {
+     "success": false,
+     "message": "Test has not started yet"
+   }
+
+   Response (failure - test expired): {
+     "success": false,
+     "message": "Test time expired"
+   }
+
+   Notes:
+   - OTP (access_code) is sent in second email link: {FRONTEND_URL}?otp={access_code}
+   - Frontend extracts OTP and sends to this endpoint
+   - Backend validates:
+     * OTP exists in email_tracking.access_code where conference_attended = true
+     * No session already exists for this student
+     * Current time is within 15 minutes of second_scheduled_time
+   - Time window: second_scheduled_time to second_scheduled_time + 15 minutes
+   - Creates new session with student_id and access_code
+   - Returns session_id, student email, and student name
+   - One-time use: Once session created, same OTP cannot be used again
+
 ===========================================
 HEALTH CHECK
 ===========================================

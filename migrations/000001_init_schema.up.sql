@@ -60,3 +60,34 @@ CREATE TABLE IF NOT EXISTS email_tracking (
 );
 
 CREATE INDEX idx_email_tracking_student_email ON email_tracking(student_id, email_type);
+
+-- Sessions table
+CREATE TABLE IF NOT EXISTS sessions (
+    id SERIAL PRIMARY KEY,
+    student_id INT REFERENCES students(id) ON DELETE CASCADE,
+    session_token VARCHAR(100) UNIQUE NOT NULL,
+    access_code VARCHAR(10),
+    started_at TIMESTAMPTZ DEFAULT NOW(),
+    completed BOOLEAN DEFAULT false,
+    completed_at TIMESTAMPTZ,
+    score INT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_sessions_student_id ON sessions(student_id);
+CREATE INDEX idx_sessions_access_code ON sessions(access_code);
+CREATE INDEX idx_sessions_session_token ON sessions(session_token);
+
+-- Answers table
+CREATE TABLE IF NOT EXISTS answers (
+    id SERIAL PRIMARY KEY,
+    session_id INT REFERENCES sessions(id) ON DELETE CASCADE,
+    question_id INT NOT NULL,
+    selected_answer VARCHAR(10),
+    is_correct BOOLEAN,
+    answered_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX idx_answers_session_id ON answers(session_id);
+CREATE INDEX idx_answers_question_id ON answers(question_id);

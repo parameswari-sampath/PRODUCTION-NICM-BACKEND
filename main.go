@@ -90,6 +90,7 @@ func main() {
 	// Live endpoints
 	liveAPI := api.Group("/live")
 	liveAPI.Post("/verify-first-mail", live.VerifyFirstMailTokenHandler)
+	liveAPI.Post("/verify-otp", live.VerifyOTPHandler)
 
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {
