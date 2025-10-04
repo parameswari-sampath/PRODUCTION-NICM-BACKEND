@@ -289,8 +289,8 @@ func sendSecondMail(userId int, token string) error {
 		baseURL = "http://localhost:8080"
 	}
 
-	// Create URL with OTP parameter
-	testURL := fmt.Sprintf("%s?OTP=%s", baseURL, accessCode)
+	// Create URL with otp parameter
+	testURL := fmt.Sprintf("%s?otp=%s", baseURL, accessCode)
 
 	// Email body
 	htmlBody := fmt.Sprintf(`
