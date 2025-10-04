@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS sessions (
     completed BOOLEAN DEFAULT false,
     completed_at TIMESTAMPTZ,
     score INT,
+    total_time_taken_seconds INT DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -84,9 +85,9 @@ CREATE TABLE IF NOT EXISTS answers (
     id SERIAL PRIMARY KEY,
     session_id INT REFERENCES sessions(id) ON DELETE CASCADE,
     question_id INT NOT NULL,
-    selected_answer VARCHAR(10),
-    is_correct BOOLEAN,
-    answered_at TIMESTAMPTZ DEFAULT NOW()
+    selected_option_index INT NOT NULL,
+    is_correct BOOLEAN NOT NULL,
+    time_taken_seconds INT NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_answers_session_id ON answers(session_id);

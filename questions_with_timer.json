@@ -1,0 +1,1135 @@
+[
+  {
+    "id": 1,
+    "name": "Section 1",
+    "time_limit": 900,
+    "questions": [
+      {
+        "id": 1,
+        "question": "The first cooperative society was established in which country?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["England", "France", "Germany", "USA"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 2,
+        "question": "In India, the Cooperative Societies Act was passed in which year?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["1919", "1949", "1904", "1912"],
+        "correctAnswer": 3
+      },
+      {
+        "id": 3,
+        "question": "Who is known as the father of the cooperative movement?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Elinor Ostrom",
+          "Robert Owen ",
+          "Nelson Mandela",
+          " Dr. V. Kurien"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 4,
+        "question": "The principle \u2018one member, one vote\u2019 is associated with:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Joint Stock Companies",
+          "Cooperative Societies",
+          "Partnership Firms",
+          "Trusts"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 5,
+        "question": "Which of the following is NOT a key feature of cooperatives?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Profit maximization",
+          "Voluntary membership",
+          "Democratic management",
+          " Service motive"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 6,
+        "question": "Which Act removed the shortcomings of the 1904 Cooperative Act?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Cooperative Societies Act 1912",
+          "Companies Act 2013",
+          "Model Cooperative Act",
+          "Banking Regulation Act"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 7,
+        "question": "Apex societies represent which level?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["Village", "District", "State", "National"],
+        "correctAnswer": 3
+      },
+      {
+        "id": 8,
+        "question": "The Rochdale Pioneers are associated with which year?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["1844", "1865", "1912", "1895"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 9,
+        "question": "Cooperative societies are registered under:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Companies Act",
+          "Trust Act",
+          "Cooperative Societies Act",
+          "Societies Registration Act"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 10,
+        "question": "In a cooperative, the liability of members is:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["Unlimited", "Limited", "Joint", "Several"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 11,
+        "question": "Which is NOT a principle of cooperatives?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Education and training",
+          "Concern for community",
+          "Autocratic control ",
+          " Voluntary membership"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 12,
+        "question": "Cooperative movement started in India in:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["1912", "1904", "1956", "1947"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 13,
+        "question": "The main aim of a cooperative society is:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Serve the members",
+          "Maximizing profits",
+          "Serving government",
+          " Serving employees"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 14,
+        "question": "Head office of National Cooperative Union of India (NCUI) is in:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["Mumbai", "New Delhi", "Hyderabad", " Kolkata"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 15,
+        "question": "The \u201ccooperative sector\u201d is referred to as:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Third sector",
+          "Public sector",
+          "Private sector",
+          "Banking sector"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 16,
+        "question": "Which committee in 1915 reviewed the cooperative movement?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Maclagan Committee",
+          "Damodaran Committee",
+          "Raghavan Committee",
+          "Mahalanobis Committee"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 17,
+        "question": "What is the minimum number of members to register a cooperative in India?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["5", "10", "15", "20"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 18,
+        "question": "Which institution assists in the training of cooperators?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["RBI", "NCCT", "SEWA", " ILO"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 19,
+        "question": "Cooperative movement is based on the principle of:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Social justice",
+          "Individual profit",
+          "Capitalism",
+          " Competition"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 20,
+        "question": "A primary cooperative society operates at:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Village/town level",
+          "National level",
+          "State level",
+          "District level"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 21,
+        "question": "The Registrar of Cooperative Societies is appointed by:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Reserve Bank",
+          "State Government",
+          "Central Government",
+          "NABARD"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 22,
+        "question": "The concept of cooperation is derived from Latin meaning:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "To collect",
+          "To work together",
+          "To compete",
+          " To serve profit"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 23,
+        "question": "Cooperative societies are governed by which type of democracy?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["Indirect", "Direct", "Nominal", "Autocracy"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 24,
+        "question": "An urban cooperative bank is an example of:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Credit cooperative",
+          "Marketing society",
+          "Housing cooperative",
+          "Dairy cooperative"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 25,
+        "question": "Cooperation vs competition:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Rivalry-based",
+          "Mutual help-based",
+          "Capitalist",
+          " Exploitative"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 26,
+        "question": "Mahila Urban Cooperative Bank is associated with:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["Women empowerment", "Housing", "Labour", " Dairy"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 27,
+        "question": "The two-tier cooperative system includes:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Primary and Central",
+          "Primary and Apex",
+          "Central and Federal",
+          "National and International"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 28,
+        "question": "\u2018Sarvodaya\u2019 is a philosophy influenced by:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["Gandhi", "Nehru", "Patel", "Ambedkar"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 29,
+        "question": "The concept \"Each for all and all for each\" is:",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": [
+          "Cooperative spirit",
+          "Individualism",
+          "Collectivism",
+          "Bureaucracy"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 30,
+        "question": "Which is NOT a type of cooperative?",
+        "description": "General Cooperative Concepts & Evolution",
+        "options": ["Dairy", "Credit", "Manufacturing", "Housing"],
+        "correctAnswer": 2
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Section 2",
+    "time_limit": 900,
+    "questions": [
+      {
+        "id": 31,
+        "question": "The world's largest dairy cooperative is:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Amul", "NAFED", "Fonterra", "Rabobank"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 32,
+        "question": "Which Indian cooperative is famous for fertilizers?",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Amul", "IFFCO", "KRIBHCO", " Saras"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 33,
+        "question": "The ICA was formed in:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["1844", "1895", "1989", "1804"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 34,
+        "question": "Which is a successful housing cooperative example in India?",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["NDDB", "Apna Ghar", "SEWA", "NCDC"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 35,
+        "question": "Which country hosts the International Cooperative Alliance headquarters?",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["UK", "Belgium", "USA", "Switzerland"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 36,
+        "question": "SEWA is a cooperative working for:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Women", "Youth", "Farmers", "Farmers"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 37,
+        "question": "The first successful consumer cooperative was in:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Rochdale", "Paris", "London", "Mumbai"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 38,
+        "question": "Which cooperative has played a crucial role in \"White Revolution\" in India?",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["IFFCO", "AMUL", "NDDB", "SEWA"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 39,
+        "question": "ICA represents:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": [
+          "5 continents",
+          "3 continents",
+          "10 continents",
+          "1 continent"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 40,
+        "question": "The famous Kerala cooperative for spices is:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["KSFDC", "KSFAC", "KSCFC", "KSFDC"],
+        "correctAnswer": 3
+      },
+      {
+        "id": 41,
+        "question": "NAFED deals with:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": [
+          "Fertilizer",
+          "Agricultural Marketing",
+          "Dairy",
+          " Banking"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 42,
+        "question": "India's first cooperative sugar mill was set up in:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Andhra Pradesh", "Maharashtra", "Kerala", "Tamil Nadu"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 43,
+        "question": "The cooperative model of Bangladesh Grameen Bank focuses on:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Microcredit", "Dairy", "Retail", "Textiles"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 44,
+        "question": "Anand Pattern refers to organizational structure of:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Amul", "IFFCO", "SEWA", "NAFED"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 45,
+        "question": "Rabobank is based in:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Australia", "Netherlands", "Spain", "Italy"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 46,
+        "question": "NCDFI works in which sector?",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Dairy", "Housing", "Marketing", "Textiles"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 47,
+        "question": "Which is a successful fishermen\u2019s cooperative society in India?",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["MSCPCR", "Amul", "SEWA", "Matsyafed"],
+        "correctAnswer": 3
+      },
+      {
+        "id": 48,
+        "question": "The largest urban cooperative bank in India:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Saraswat Bank", "TNSC", "Apna Sahakari", "GSCB"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 49,
+        "question": "IFFCO is acronym for:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": [
+          "International Office",
+          "Indian Food Federation",
+          "Indian Farmers Fertiliser Cooperative",
+          "Investment Federation"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 50,
+        "question": "Name the global organization fostering co-op statistics:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["ICA", "FAO", "IFAD", "UNIDO"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 51,
+        "question": "India's first cooperative minister:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Sardar Patel", "Lal Bahadur", "Nehru", "Rajendra Prasad"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 52,
+        "question": "Which sector has highest cooperative presence in India?",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["IT", "Telecom", "Agriculture", "Health"],
+        "correctAnswer": 2
+      },
+      {
+        "id": 53,
+        "question": "The global annual celebration of cooperatives is on:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": [
+          "First Saturday of July",
+          "Last Sunday of August",
+          "15th August",
+          "2nd October"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 54,
+        "question": "\"Urban Credit\" refers to:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": [
+          "Cooperative Banking",
+          "Housing Finance",
+          "Dairy loans",
+          "Microcredit"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 55,
+        "question": "Multi-State Cooperative Societies Act enacted in:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["1985", "2002", "1991", "2010"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 56,
+        "question": "Name an international cooperative bank:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Rabobank", "Amul Bank", "NCDC", "NCDC"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 57,
+        "question": "Cooperative Flag is traditionally:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Rainbow colored", "Blue", "White", "Red"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 58,
+        "question": "The cooperative insurance sector pioneered by:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": [
+          "LIC",
+          "CIGNA",
+          "Co-operative Insurance Society (UK)",
+          "HDFC"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 59,
+        "question": "Mondragon is a leading cooperative in:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Spain", "Brazil", "Russia", "Norway"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 60,
+        "question": "KRIBHCO is associated with:",
+        "description": "Successful Indian & International Cooperatives",
+        "options": ["Fertilizers", "Banking", "Dairy", "Housing"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Section 3",
+    "time_limit": 900,
+    "questions": [
+      {
+        "id": 61,
+        "question": "The UN declared which year as the International Year of Cooperatives?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["2005", "2012", "2022", "2019"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 62,
+        "question": "The SDG directly targeting poverty is:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["SDG 3", "SDG 1", "SDG 10", "SDG 17"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 63,
+        "question": "Which SDG principle aligns with 'affordability and inclusion'?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["SDG 10", "SDG 6", "SDG 8", "SDG 14"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 64,
+        "question": "Cooperatives Build a Better World' was the theme in:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["2025", "2022", "2015", "2017"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 65,
+        "question": "India's representation at ICA is through:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["NAFED", "NCUI", "Amul", "NCDC"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 66,
+        "question": "Which SDG addresses \"Gender Equality\"?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["SDG 2", "SDG 5", "SDG 9", "SDG 11"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 67,
+        "question": "SDGs stand for:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "Sustainable Development Goals ",
+          "Social Development Groups",
+          "Social Demographic Goals",
+          "None"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 68,
+        "question": "Which body created SDGs?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["G7", "United Nations", "BRICS", "UNESCO"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 69,
+        "question": "Which SDG aims for Quality Education?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["SDG 4", "SDG 3", "SDG 1", "SDG 7"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 70,
+        "question": "Which summit finalized the SDGs in 2015?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "New York UN Summit ",
+          "Paris Summit",
+          "Geneva Convention",
+          "Vienna Conference"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 71,
+        "question": "SDGs are targeted for achievement by which year?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["2030", "2025", "2050", "2022"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 72,
+        "question": "ILO recognizes co-ops as tools for:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["Decent work", "Privatization", "Unemployment", "Taxation"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 73,
+        "question": "\u201cCooperatives for Sustainable Communities\u201d is a concept by:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["ICA", "FAO", "IMF", "IFFCO"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 74,
+        "question": "The SDG theme for cooperatives in 2023 was:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "Industry 4.0",
+          "Women leadership",
+          "Cooperatives for Accelerated Recovery",
+          "Healthcare"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 75,
+        "question": "Which SDG covers Responsible Consumption?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["SDG 12", "SDG 9", "SDG 1", "SDG 3"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 76,
+        "question": "SDG 13 targets:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["Climate Action", "Industry", "Health", "Water"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 77,
+        "question": "Which country is known for \u201cCooperative Socialism\u201d?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["Israel (Kibbutz)", "France", "Singapore", "Chile"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 78,
+        "question": "European Cooperative Statute came in:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["2018", "1995", "2003", "2021"],
+        "correctAnswer": 2
+      },
+      {
+        "id": 79,
+        "question": "The G20 2025 summit theme relevant for cooperatives:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "One Earth, One Family, One Future ",
+          "Global Technology",
+          "Energy Security",
+          "Free Market"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 80,
+        "question": "Which is NOT an SDG for cooperatives?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "No Poverty",
+          "Zero Hunger",
+          "Mars Colonization",
+          "Decent Work"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 81,
+        "question": "Indian cooperative directly linked to SDG 8:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["SEWA", "NDDB", "AMUL", "NABARD"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 82,
+        "question": "A \u201cfuture-ready cooperative\u201d is characterized by:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "Sustainability ",
+          "Profit-only motive",
+          "Hierarchical control",
+          "Isolation"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 83,
+        "question": "Indian cooperatives' SDG Roadmap is provided by:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["NITI Aayog", "RBI", "UNDP", "ICA"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 84,
+        "question": "IFFCO\u2019s \u2018Nano Urea\u2019 is related to which SDG?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["SDG 2 (Zero Hunger)", "SDG 8", "SDG 9", "SDG 13"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 85,
+        "question": "Which Indian initiative encourages \"Green Cooperatives\"?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "Sahkar Mitra",
+          "PM Fasal Bima",
+          "Amul White Revolution",
+          "Skill India"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 86,
+        "question": "\"Leave No One Behind\" is a motto of which global agenda?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["MDG", "SDG", "WTO", "GATT"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 87,
+        "question": "2030 is the target year for which agenda?",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["SDGs", "G20", "Vision 2022", "NAFTA"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 88,
+        "question": "International Cooperative Day is observed on:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "First Saturday of July",
+          "January 1",
+          "October 2",
+          "November 14"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 89,
+        "question": "United Nations defines cooperatives as tools for:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": [
+          "Free market",
+          "Profit maximization",
+          "Monopoly",
+          "Inclusive Growth"
+        ],
+        "correctAnswer": 3
+      },
+      {
+        "id": 90,
+        "question": "\u201cCooperatives for Youth\u201d is a recent UN focus for:",
+        "description": "SDGs, International Evolution, the Cooperative Future",
+        "options": ["2024", "2025", "2030", "2023"],
+        "correctAnswer": 0
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Section 4",
+    "time_limit": 900,
+    "questions": [
+      {
+        "id": 91,
+        "question": "Which Ministry currently oversees the Indian cooperative movement?",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Ministry of Rural Development",
+          "Ministry of Cooperation",
+          "Social Justice",
+          "Finance"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 92,
+        "question": "\u201cSahkar Se Samriddhi\u201d refers to:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "An official government campaign",
+          "A private slogan",
+          "Dairy cooperative",
+          "Housing initiative"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 93,
+        "question": "The SDG India Index is published by:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["NABARD", "NITI Aayog", "RBI", "FICCI"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 94,
+        "question": "Which Indian cooperative is known as an SDG champion for women empowerment?",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["Amul", "SEWA", "IFFCO", "NAFED"],
+        "correctAnswer": 1
+      },
+      {
+        "id": 95,
+        "question": "The Ministry of Cooperation was established in:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["2021", "2012", "2017", "2023"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 96,
+        "question": "Cooperatives and Farmer Producer Organisations are encouraged under:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Digital India",
+          "Doubling Farmers' Income initiative ",
+          "Swachh Bharat",
+          "GST Act"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 97,
+        "question": "Digitalization of cooperative records is a focus under:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["PACS computerization", "PMGSY", "UIDAI", "Jandhan Yojana"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 98,
+        "question": "National Cooperative Policy Draft was released in:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["2023", "2013", "2020", "2005"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 99,
+        "question": "Cooperative sector\u2019s contribution to rural credit is:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["Over 60%", "Under 10%", "25%", "80%"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 100,
+        "question": "The world\u2019s largest milk producer country using cooperatives:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["India", "USA", "China", "Germany"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 101,
+        "question": "NCDC stands for:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "National Credit Data Company",
+          "National Dairy Cooperation",
+          "New Cooperative Directorate",
+          "National Cooperative Development Corporation"
+        ],
+        "correctAnswer": 3
+      },
+      {
+        "id": 102,
+        "question": "E-NAM promotes:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Urban services",
+          "Online Agricultural Marketing",
+          "Dairy Registration",
+          "Skill Development"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 103,
+        "question": "NDDB is famous for:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Blue Revolution",
+          "Red Revolution",
+          "White Revolution",
+          "Green Revolution"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 104,
+        "question": "Government program transforming cooperative credit:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Mudra Loan",
+          "Startup India",
+          "PACS Revamp ",
+          "Skill India"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 105,
+        "question": "India's first \u201cCooperative Policy\u201d was drafted in:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["2002", "1947", "2014", "1991"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 106,
+        "question": "Cooperative societies in India get policy direction mainly from:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "State governments only",
+          "UNDP",
+          "US Embassy",
+          "Central Government"
+        ],
+        "correctAnswer": 3
+      },
+      {
+        "id": 107,
+        "question": "India\u2019s approach to cooperative SDGs is aligned with:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Paris Agreement",
+          "ASEAN goals",
+          "2030 Agenda",
+          "World Bank Framework"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 108,
+        "question": "NITI Aayog\u2019s SDG India Index started from:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": ["2018", "2022", "2020", "2015"],
+        "correctAnswer": 0
+      },
+      {
+        "id": 109,
+        "question": "Ministry of Cooperation\u2019s e-governance portal is named:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Amul Connect",
+          "Kisan Call Center",
+          "Sahakar Se Samriddhi",
+          "Digital Seva"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 110,
+        "question": "PM's AatmaNirbhar Bharat emphasizes:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Self-reliant cooperative movement",
+          "Foreign investments only",
+          "Import dependence",
+          "No rural development"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 111,
+        "question": "Cooperative societies are key partners in:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "National Nutrition Mission",
+          "Digital India only",
+          "Make in India only",
+          "Ayushman Bharat only"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 112,
+        "question": "The National Cooperative Policy aims to:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Strengthen legal & financial frameworks",
+          "Privatize all co-ops",
+          "Centralize management",
+          "Reduce member benefits"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 113,
+        "question": "Cooperative marketing promotes",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Farmer welfare",
+          "Only company profit",
+          "Only exports",
+          "Reducing rural jobs"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 114,
+        "question": "NABARD supports cooperative banks through:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Insurance",
+          "Policy control only",
+          "Refinance & technical support",
+          "Transport grants"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 115,
+        "question": "NCDC\u2019s focus is on:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Only dairy cooperatives",
+          "Funding and guidance for cooperatives",
+          "Employee training abroad",
+          "Privatization"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 116,
+        "question": "Government \"Sahakar-22\" aims at:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Stopping rural funding",
+          "Limiting only to cities",
+          "Expanding cooperatives to uncovered panchayats ",
+          "Privatizing housing"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "id": 117,
+        "question": "Cooperative sector\u2019s tax benefits are governed by:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Income Tax Act provisions",
+          "No laws",
+          "State-specific",
+          "Insurance policies"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "id": 118,
+        "question": "Indian co-ops\u2019 support for SDG 17 is via:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Only local sales",
+          "Isolation",
+          "Reverse migration",
+          "Global partnerships"
+        ],
+        "correctAnswer": 3
+      },
+      {
+        "id": 119,
+        "question": "Cooperatives support \u201czero hunger\u201d goal by:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Taxing farmers",
+          "Food distribution & marketing",
+          "Import focus",
+          "Only online presence"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "id": 120,
+        "question": "The future vision for Indian cooperatives is:",
+        "description": "Government of India Initiatives Towards SDGs",
+        "options": [
+          "Isolation from SDGs",
+          "Only traditional models",
+          "Sustainable and inclusive growth",
+          "Disempowerment"
+        ],
+        "correctAnswer": 2
+      }
+    ]
+  }
+]
