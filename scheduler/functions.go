@@ -2,6 +2,7 @@ package scheduler
 
 import (
 	"log"
+	"mcq-exam/live"
 	"time"
 )
 
@@ -23,10 +24,12 @@ func DummySecondEmail() {
 
 // FunctionRegistry maps function names to actual functions
 var FunctionRegistry = map[string]func(){
-	"DummyFirstEmail":         DummyFirstEmail,
-	"DummySecondEmail":        DummySecondEmail,
-	"SendFirstEmailToAll":     SendFirstEmailToAll,
-	"SendSecondEmailToEligible": SendSecondEmailToEligible,
+	"DummyFirstEmail":            DummyFirstEmail,
+	"DummySecondEmail":           DummySecondEmail,
+	"SendFirstEmailToAll":        SendFirstEmailToAll,
+	"SendSecondEmailToEligible":  SendSecondEmailToEligible,
+	"Phase1FirstMailVerification": live.Phase1FirstMailVerification,
+	"Phase2SecondMailSending":    live.Phase2SecondMailSending,
 }
 
 // ExecuteFunction calls a registered function by name

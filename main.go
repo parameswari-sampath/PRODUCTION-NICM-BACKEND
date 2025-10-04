@@ -4,6 +4,7 @@ import (
 	"log"
 	"mcq-exam/db"
 	"mcq-exam/handlers"
+	"mcq-exam/live"
 	"mcq-exam/scheduler"
 	"os"
 	"os/signal"
@@ -85,6 +86,10 @@ func main() {
 
 	// Conference token verification
 	api.Post("/verify-token", handlers.VerifyConferenceTokenHandler)
+
+	// Live endpoints
+	liveAPI := api.Group("/live")
+	liveAPI.Post("/verify-first-mail", live.VerifyFirstMailTokenHandler)
 
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {
