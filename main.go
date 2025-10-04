@@ -4,6 +4,7 @@ import (
 	"log"
 	"mcq-exam/db"
 	"mcq-exam/handlers"
+	"mcq-exam/scheduler"
 	"os"
 	"os/signal"
 	"syscall"
@@ -26,6 +27,9 @@ func main() {
 	if err := db.RunMigrations(databaseURL); err != nil {
 		log.Fatalf("Failed to run migrations: %v", err)
 	}
+
+	// Start scheduler
+	scheduler.StartScheduler()
 
 	// Create Fiber app
 	app := fiber.New(fiber.Config{
@@ -68,6 +72,19 @@ func main() {
 	// Webhook endpoints
 	webhooks := api.Group("/webhooks")
 	webhooks.Post("/zeptomail", handlers.ZeptoMailWebhookHandler)
+
+	// Event scheduling endpoints
+	event := api.Group("/event")
+	event.Post("/schedule", handlers.CreateEventScheduleHandler)
+	event.Get("/schedule", handlers.GetEventScheduleHandler)
+
+	// Email tracking endpoints
+	api.Get("/track-open", handlers.TrackEmailOpenHandler)
+	tracking := api.Group("/tracking")
+	tracking.Get("/opened-first", handlers.GetStudentsWhoOpenedHandler)
+
+	// Conference token verification
+	api.Post("/verify-token", handlers.VerifyConferenceTokenHandler)
 
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {

@@ -14,8 +14,11 @@ func ResetDatabase() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	// Drop all tables
+	// Drop all tables (CASCADE will handle indexes and constraints)
 	dropQuery := `
+		DROP TABLE IF EXISTS email_tracking CASCADE;
+		DROP TABLE IF EXISTS event_schedule CASCADE;
+		DROP TABLE IF EXISTS email_logs CASCADE;
 		DROP TABLE IF EXISTS students CASCADE;
 		DROP TABLE IF EXISTS schema_migrations CASCADE;
 	`
