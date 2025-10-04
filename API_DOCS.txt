@@ -260,7 +260,7 @@ LIVE API ENDPOINTS
 
    Response (success): {
      "success": true,
-     "session_id": 1,
+     "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4",
      "email": "john@example.com",
      "name": "John Doe",
      "message": "OTP verified successfully"
@@ -289,9 +289,37 @@ LIVE API ENDPOINTS
      * No session already exists for this student
      * Current time is within 15 minutes of second_scheduled_time
    - Time window: second_scheduled_time to second_scheduled_time + 15 minutes
-   - Creates new session with student_id and access_code
-   - Returns session_id, student email, and student name
+   - Creates new session with student_id, session_token, and access_code
+   - Returns session_token (64-character alphanumeric), student email, and student name
    - One-time use: Once session created, same OTP cannot be used again
+
+19. START SESSION
+   POST /api/live/start-session
+   Body: {
+     "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4"
+   }
+
+   Response (success - 201 Created): {
+     "success": true,
+     "message": "Session started successfully"
+   }
+
+   Response (failure - 404 Not Found): {
+     "success": false,
+     "message": "Invalid session token"
+   }
+
+   Response (failure - 400 Bad Request): {
+     "success": false,
+     "message": "Session token is required"
+   }
+
+   Notes:
+   - Frontend sends session_token received from verify-otp endpoint
+   - Backend validates session token exists in database
+   - Updates started_at timestamp to current time (NOW())
+   - Returns 201 Created on success, 404 if token invalid
+   - This marks the official start time of the test session
 
 ===========================================
 HEALTH CHECK

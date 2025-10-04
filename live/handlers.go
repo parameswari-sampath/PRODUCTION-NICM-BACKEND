@@ -240,3 +240,55 @@ func VerifyOTPHandler(c *fiber.Ctx) error {
 		Message:      "OTP verified successfully",
 	})
 }
+
+type StartSessionRequest struct {
+	SessionToken string `json:"session_token"`
+}
+
+type StartSessionResponse struct {
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
+// StartSessionHandler handles POST /api/live/start-session
+func StartSessionHandler(c *fiber.Ctx) error {
+	var req StartSessionRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(StartSessionResponse{
+			Success: false,
+			Message: "Invalid request body",
+		})
+	}
+
+	if req.SessionToken == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(StartSessionResponse{
+			Success: false,
+			Message: "Session token is required",
+		})
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Verify session token exists and update started_at
+	updateQuery := `
+		UPDATE sessions
+		SET started_at = NOW(), updated_at = NOW()
+		WHERE session_token = $1
+		RETURNING id
+	`
+	var sessionID int
+	err := db.Pool.QueryRow(ctx, updateQuery, req.SessionToken).Scan(&sessionID)
+	if err != nil {
+		log.Printf("Session validation failed: %v", err)
+		return c.Status(fiber.StatusNotFound).JSON(StartSessionResponse{
+			Success: false,
+			Message: "Invalid session token",
+		})
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(StartSessionResponse{
+		Success: true,
+		Message: "Session started successfully",
+	})
+}
