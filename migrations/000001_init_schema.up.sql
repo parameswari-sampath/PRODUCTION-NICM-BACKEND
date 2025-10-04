@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS students (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_students_email ON students(email);
+CREATE INDEX IF NOT EXISTS idx_students_email ON students(email);
 
 -- Email logs table
 CREATE TABLE IF NOT EXISTS email_logs (
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS email_logs (
     sent_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_email_logs_student_id ON email_logs(student_id);
+CREATE INDEX IF NOT EXISTS idx_email_logs_student_id ON email_logs(student_id);
 
 -- Event schedule table
 CREATE TABLE IF NOT EXISTS event_schedule (
@@ -40,8 +40,8 @@ CREATE TABLE IF NOT EXISTS event_schedule (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_event_schedule_first_time ON event_schedule(first_scheduled_time) WHERE first_executed = false;
-CREATE INDEX idx_event_schedule_second_time ON event_schedule(second_scheduled_time) WHERE second_executed = false;
+CREATE INDEX IF NOT EXISTS idx_event_schedule_first_time ON event_schedule(first_scheduled_time) WHERE first_executed = false;
+CREATE INDEX IF NOT EXISTS idx_event_schedule_second_time ON event_schedule(second_scheduled_time) WHERE second_executed = false;
 
 -- Email tracking table
 CREATE TABLE IF NOT EXISTS email_tracking (
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS email_tracking (
     CONSTRAINT unique_student_email_type UNIQUE (student_id, email_type)
 );
 
-CREATE INDEX idx_email_tracking_student_email ON email_tracking(student_id, email_type);
+CREATE INDEX IF NOT EXISTS idx_email_tracking_student_email ON email_tracking(student_id, email_type);
 
 -- Sessions table
 CREATE TABLE IF NOT EXISTS sessions (
@@ -75,9 +75,9 @@ CREATE TABLE IF NOT EXISTS sessions (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_sessions_student_id ON sessions(student_id);
-CREATE INDEX idx_sessions_access_code ON sessions(access_code);
-CREATE INDEX idx_sessions_session_token ON sessions(session_token);
+CREATE INDEX IF NOT EXISTS idx_sessions_student_id ON sessions(student_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_access_code ON sessions(access_code);
+CREATE INDEX IF NOT EXISTS idx_sessions_session_token ON sessions(session_token);
 
 -- Answers table
 CREATE TABLE IF NOT EXISTS answers (
@@ -89,5 +89,5 @@ CREATE TABLE IF NOT EXISTS answers (
     answered_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE INDEX idx_answers_session_id ON answers(session_id);
-CREATE INDEX idx_answers_question_id ON answers(question_id);
+CREATE INDEX IF NOT EXISTS idx_answers_session_id ON answers(session_id);
+CREATE INDEX IF NOT EXISTS idx_answers_question_id ON answers(question_id);
