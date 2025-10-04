@@ -62,21 +62,53 @@ func sendFirstMail(userId int, token string) error {
 
 	// Email body
 	htmlBody := fmt.Sprintf(`
-		<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-			<h2>Conference Invitation</h2>
+		<div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px;">
+			<h2 style="color: #2c3e50;">Invitation to the Inaugural Virtual Meeting – International Online Quiz on Cooperatives</h2>
+
 			<p>Dear %s,</p>
-			<p>You are invited to attend our live conference session!</p>
-			<p>Click the button below to join:</p>
-			<p><a href="%s" style="background-color: #4CAF50; color: white; padding: 14px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">Join Conference Now</a></p>
-			<p>This link is unique to you and can only be used once.</p>
-			<p>Best regards,<br>SmartMCQ Team</p>
+
+			<p><strong>Greetings from Natesan Institute of Cooperative Management (NICM), Chennai!</strong></p>
+
+			<p>In commemoration of the <strong>International Year of Cooperatives</strong> and in alignment with the vision of <strong>"Sahakar Se Samriddhi"</strong> (Prosperity through Cooperation), we are delighted to host the <strong>International Online Quiz on Cooperatives</strong>. This event celebrates the strength of the cooperative movement in fostering inclusive growth, empowerment, and sustainable development across the globe.</p>
+
+			<p>We cordially invite you to join the <strong>Inaugural Virtual Meeting</strong> of the International Online Quiz:</p>
+
+			<div style="background-color: #f8f9fa; padding: 15px; border-left: 4px solid #4CAF50; margin: 20px 0;">
+				<p style="margin: 5px 0;"><strong>📅 Date:</strong> 8th October 2025</p>
+				<p style="margin: 5px 0;"><strong>🕒 Login Time:</strong> 1:45 PM (IST) onwards</p>
+				<p style="margin: 5px 0;"><strong>🎤 Inauguration:</strong> 2:00 PM (IST)</p>
+				<p style="margin: 5px 0;"><strong>🔗 Join Link:</strong> <a href="%s" style="color: #4CAF50; font-weight: bold;">Click here to join</a></p>
+			</div>
+
+			<h3 style="color: #2c3e50;">Important Instructions for Participants:</h3>
+			<ul style="line-height: 1.8;">
+				<li>At the end of this inaugural session, you will receive your link for the International Online Quiz.</li>
+				<li>The quiz will be conducted between <strong>2:30 PM and 3:30 PM</strong> (your local time).</li>
+				<li>Upon completion, you can view your responses, the correct answers, and your overall score.</li>
+				<li>All participants will receive a <strong>Participation Certificate</strong>.</li>
+				<li>The <strong>Top 10 scorers</strong> will be awarded <strong>Merit Certificates</strong>.</li>
+				<li>The <strong>Winner</strong> will be selected based on the highest score and the time taken to complete the quiz (in case of a tie, faster completion time will be considered).</li>
+			</ul>
+
+			<p>This international event is not just a competition but also a platform to celebrate the spirit of cooperation and its role in creating a sustainable and equitable world.</p>
+
+			<p>We look forward to your enthusiastic participation and presence in the inaugural session.</p>
+
+			<p style="margin-top: 30px;">With warm regards,</p>
+			<p><strong>Dr. U. Homiga</strong><br>
+			Event Convenor,<br>
+			Natesan Institute of Cooperative Management (NICM), Chennai</p>
+
+			<p style="text-align: center; color: #4CAF50; font-style: italic; margin-top: 30px; font-size: 16px;">
+				"Cooperatives: Building a Better World Together"
+			</p>
 		</div>
 	`, name, conferenceLink)
 
 	params := utils.SendEmailParams{
 		ToEmail:  email,
 		ToName:   name,
-		Subject:  "Conference Invitation - SmartMCQ",
+		Subject:  "Invitation to the Inaugural Virtual Meeting – International Online Quiz on Cooperatives",
 		HTMLBody: htmlBody,
 	}
 
@@ -283,14 +315,14 @@ func sendSecondMail(userId int, token string) error {
 		return fmt.Errorf("access code not found for user %d", userId)
 	}
 
-	// Get base URL from environment
-	baseURL := os.Getenv("BASE_URL")
-	if baseURL == "" {
-		baseURL = "http://localhost:8080"
+	// Get frontend URL from environment
+	frontendURL := os.Getenv("FRONTEND_URL")
+	if frontendURL == "" {
+		frontendURL = "http://localhost:3000"
 	}
 
 	// Create URL with otp parameter
-	testURL := fmt.Sprintf("%s?otp=%s", baseURL, accessCode)
+	testURL := fmt.Sprintf("%s?otp=%s", frontendURL, accessCode)
 
 	// Email body
 	htmlBody := fmt.Sprintf(`

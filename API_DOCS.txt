@@ -144,28 +144,38 @@ EVENT SCHEDULING (CRON JOB)
 14. CREATE EVENT SCHEDULE
    POST /api/event/schedule
    Body: {
-     "first_function": "DummyFirstEmail",
      "first_scheduled_time": "2025-10-05T15:30:00",
-     "second_function": "DummySecondEmail",
-     "second_scheduled_time": "2025-10-05T20:00:00"
+     "second_scheduled_time": "2025-10-05T20:00:00",
+     "video_url": "https://www.youtube.com/shorts/s5fRuoZ0SVw"
    }
 
    Response: {
      "message": "Schedule created successfully",
      "schedule_id": 1,
-     "first_function": "DummyFirstEmail",
+     "first_function": "Phase1FirstMailVerification",
      "first_scheduled_time": "2025-10-05T15:30:00+05:30",
-     "second_function": "DummySecondEmail",
-     "second_scheduled_time": "2025-10-05T20:00:00+05:30"
+     "second_function": "Phase2SecondMailSending",
+     "second_scheduled_time": "2025-10-05T20:00:00+05:30",
+     "video_url": "https://www.youtube.com/shorts/s5fRuoZ0SVw"
    }
 
    Notes:
    - Times must be in IST (Indian Standard Time) format: YYYY-MM-DDTHH:MM:SS
    - Example: "2025-10-05T15:30:00" means 3:30 PM IST on Oct 5, 2025
+   - Time format is: YYYY-MM-DDTHH:MM:SS (24-hour format)
+     * YYYY = 4-digit year (e.g., 2025)
+     * MM = 2-digit month (01-12)
+     * DD = 2-digit day (01-31)
+     * HH = 2-digit hour in 24-hour format (00-23)
+     * MM = 2-digit minute (00-59)
+     * SS = 2-digit second (00-59)
    - No need for "Z" or "+05:30" - just provide IST time directly
    - second_scheduled_time must be after first_scheduled_time
+   - video_url is required - the YouTube/video URL to show after first email verification
    - Cron job checks every minute and executes functions at scheduled times
-   - Available functions: DummyFirstEmail, DummySecondEmail
+   - Available functions:
+     * Phase1FirstMailVerification - Sends first email to all students with conference invitation
+     * Phase2SecondMailSending - Sends second email to students who verified first email
 
 15. GET EVENT SCHEDULE
    GET /api/event/schedule
@@ -212,6 +222,35 @@ CONFERENCE TOKEN VERIFICATION
    - Returns YouTube video URL from event_schedule table
    - Marks student as conference_attended = true (one-time use)
    - Only students who verify token are eligible for second email
+
+===========================================
+LIVE API ENDPOINTS
+===========================================
+
+17. VERIFY FIRST MAIL TOKEN
+   POST /api/live/verify-first-mail
+   Body: {
+     "token": "a1b2c3d4e5f6..."
+   }
+
+   Response (success): {
+     "success": true,
+     "video_url": "https://www.youtube.com/shorts/s5fRuoZ0SVw",
+     "message": "Token verified successfully"
+   }
+
+   Response (failure): {
+     "success": false,
+     "message": "Invalid or expired token"
+   }
+
+   Notes:
+   - Token is sent in first email link: {FRONTEND_URL}/live?token={token}
+   - Frontend extracts token and sends to this endpoint
+   - Backend validates token, marks conference_attended = true
+   - Generates 6-digit alphanumeric access_code for second email
+   - Returns YouTube video URL from event_schedule table
+   - Token can only be used once
 
 ===========================================
 HEALTH CHECK

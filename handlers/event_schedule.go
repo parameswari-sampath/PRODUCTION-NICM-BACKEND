@@ -10,9 +10,7 @@ import (
 )
 
 type CreateScheduleRequest struct {
-	FirstFunction       string `json:"first_function"`
 	FirstScheduledTime  string `json:"first_scheduled_time"`   // ISO8601 format
-	SecondFunction      string `json:"second_function"`
 	SecondScheduledTime string `json:"second_scheduled_time"` // ISO8601 format
 	VideoURL            string `json:"video_url"`
 }
@@ -56,6 +54,10 @@ func CreateEventScheduleHandler(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "video_url is required"})
 	}
 
+	// Hardcoded function names
+	firstFunction := "Phase1FirstMailVerification"
+	secondFunction := "Phase2SecondMailSending"
+
 	// Insert schedule
 	query := `
 		INSERT INTO event_schedule (first_function, first_scheduled_time, second_function, second_scheduled_time, video_url)
@@ -64,20 +66,20 @@ func CreateEventScheduleHandler(c *fiber.Ctx) error {
 	`
 
 	var scheduleID int
-	err = db.Pool.QueryRow(ctx, query, req.FirstFunction, firstTime, req.SecondFunction, secondTime, req.VideoURL).Scan(&scheduleID)
+	err = db.Pool.QueryRow(ctx, query, firstFunction, firstTime, secondFunction, secondTime, req.VideoURL).Scan(&scheduleID)
 	if err != nil {
 		log.Printf("Failed to create schedule: %v", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to create schedule"})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message":              "Schedule created successfully",
-		"schedule_id":          scheduleID,
-		"first_function":       req.FirstFunction,
-		"first_scheduled_time": firstTime,
-		"second_function":      req.SecondFunction,
+		"message":               "Schedule created successfully",
+		"schedule_id":           scheduleID,
+		"first_function":        firstFunction,
+		"first_scheduled_time":  firstTime,
+		"second_function":       secondFunction,
 		"second_scheduled_time": secondTime,
-		"video_url":            req.VideoURL,
+		"video_url":             req.VideoURL,
 	})
 }
 
