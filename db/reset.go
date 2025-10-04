@@ -16,6 +16,8 @@ func ResetDatabase() error {
 
 	// Drop all tables (CASCADE will handle indexes and constraints)
 	dropQuery := `
+		DROP TABLE IF EXISTS answers CASCADE;
+		DROP TABLE IF EXISTS sessions CASCADE;
 		DROP TABLE IF EXISTS email_tracking CASCADE;
 		DROP TABLE IF EXISTS event_schedule CASCADE;
 		DROP TABLE IF EXISTS email_logs CASCADE;
