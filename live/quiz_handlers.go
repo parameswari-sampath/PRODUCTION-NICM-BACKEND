@@ -2,8 +2,10 @@ package live
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"mcq-exam/db"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -32,6 +34,48 @@ type EndSessionResponse struct {
 	Score              *int   `json:"score,omitempty"`
 	TotalTimeTaken     *int   `json:"total_time_taken_seconds,omitempty"`
 	TotalQuestions     *int   `json:"total_questions_answered,omitempty"`
+}
+
+type GetResultRequest struct {
+	Email string `json:"email"`
+}
+
+type StudentInfo struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
+type SessionInfo struct {
+	Score                  int  `json:"score"`
+	TotalTimeTakenSeconds  int  `json:"total_time_taken_seconds"`
+	TotalQuestionsAnswered int  `json:"total_questions_answered"`
+	Completed              bool `json:"completed"`
+}
+
+type QuestionResult struct {
+	ID               int     `json:"id"`
+	Question         string  `json:"question"`
+	Description      string  `json:"description"`
+	Options          []string `json:"options"`
+	CorrectAnswer    int     `json:"correctAnswer"`
+	SelectedAnswer   *int    `json:"selected_answer"`
+	IsCorrect        *bool   `json:"is_correct"`
+	TimeTakenSeconds *int    `json:"time_taken_seconds"`
+}
+
+type SectionResult struct {
+	ID        int              `json:"id"`
+	Name      string           `json:"name"`
+	TimeLimit int              `json:"time_limit"`
+	Questions []QuestionResult `json:"questions"`
+}
+
+type GetResultResponse struct {
+	Success  bool            `json:"success"`
+	Message  string          `json:"message,omitempty"`
+	Student  *StudentInfo    `json:"student,omitempty"`
+	Session  *SessionInfo    `json:"session,omitempty"`
+	Sections []SectionResult `json:"sections,omitempty"`
 }
 
 // SubmitAnswerHandler handles POST /api/live/submit-answer
@@ -254,5 +298,188 @@ func EndSessionHandler(c *fiber.Ctx) error {
 		Score:          &score,
 		TotalTimeTaken: &totalTimeTaken,
 		TotalQuestions: &totalQuestions,
+	})
+}
+
+// GetResultHandler handles POST /api/live/result
+func GetResultHandler(c *fiber.Ctx) error {
+	var req GetResultRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(GetResultResponse{
+			Success: false,
+			Message: "Invalid request body",
+		})
+	}
+
+	// Validate email
+	if req.Email == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(GetResultResponse{
+			Success: false,
+			Message: "Email is required",
+		})
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Step 1: Get student by email
+	var studentID int
+	var studentName string
+	studentQuery := `
+		SELECT id, name
+		FROM students
+		WHERE email = $1
+	`
+	err := db.Pool.QueryRow(ctx, studentQuery, req.Email).Scan(&studentID, &studentName)
+	if err != nil {
+		log.Printf("Student not found: %v", err)
+		return c.Status(fiber.StatusNotFound).JSON(GetResultResponse{
+			Success: false,
+			Message: "Student not found",
+		})
+	}
+
+	// Step 2: Get session by student_id
+	var sessionID int
+	var score, totalTimeTaken int
+	var completed bool
+	sessionQuery := `
+		SELECT id, COALESCE(score, 0), COALESCE(total_time_taken_seconds, 0), completed
+		FROM sessions
+		WHERE student_id = $1
+	`
+	err = db.Pool.QueryRow(ctx, sessionQuery, studentID).Scan(&sessionID, &score, &totalTimeTaken, &completed)
+	if err != nil {
+		log.Printf("Session not found: %v", err)
+		return c.Status(fiber.StatusNotFound).JSON(GetResultResponse{
+			Success: false,
+			Message: "No session found for this student",
+		})
+	}
+
+	// Step 3: Get all answers for this session
+	answersQuery := `
+		SELECT question_id, selected_option_index, is_correct, time_taken_seconds
+		FROM answers
+		WHERE session_id = $1
+	`
+	rows, err := db.Pool.Query(ctx, answersQuery, sessionID)
+	if err != nil {
+		log.Printf("Failed to fetch answers: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(GetResultResponse{
+			Success: false,
+			Message: "Failed to fetch answers",
+		})
+	}
+	defer rows.Close()
+
+	// Create map of answers by question_id
+	answersMap := make(map[int]struct {
+		SelectedOption int
+		IsCorrect      bool
+		TimeTaken      int
+	})
+	answeredCount := 0
+
+	for rows.Next() {
+		var questionID, selectedOption, timeTaken int
+		var isCorrect bool
+		if err := rows.Scan(&questionID, &selectedOption, &isCorrect, &timeTaken); err != nil {
+			log.Printf("Failed to scan answer: %v", err)
+			continue
+		}
+		answersMap[questionID] = struct {
+			SelectedOption int
+			IsCorrect      bool
+			TimeTaken      int
+		}{selectedOption, isCorrect, timeTaken}
+		answeredCount++
+	}
+
+	// Step 4: Load questions from JSON file
+	questionsFile, err := os.ReadFile("questions_with_timer.json")
+	if err != nil {
+		log.Printf("Failed to read questions file: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(GetResultResponse{
+			Success: false,
+			Message: "Failed to load questions",
+		})
+	}
+
+	// Define structure for parsing JSON
+	type JSONQuestion struct {
+		ID          int      `json:"id"`
+		Question    string   `json:"question"`
+		Description string   `json:"description"`
+		Options     []string `json:"options"`
+		CorrectAnswer int    `json:"correctAnswer"`
+	}
+	type JSONSection struct {
+		ID        int            `json:"id"`
+		Name      string         `json:"name"`
+		TimeLimit int            `json:"time_limit"`
+		Questions []JSONQuestion `json:"questions"`
+	}
+	var jsonSections []JSONSection
+
+	if err := json.Unmarshal(questionsFile, &jsonSections); err != nil {
+		log.Printf("Failed to parse questions JSON: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(GetResultResponse{
+			Success: false,
+			Message: "Failed to parse questions",
+		})
+	}
+
+	// Step 5: Merge answers into questions
+	var sections []SectionResult
+	for _, jsonSection := range jsonSections {
+		section := SectionResult{
+			ID:        jsonSection.ID,
+			Name:      jsonSection.Name,
+			TimeLimit: jsonSection.TimeLimit,
+			Questions: make([]QuestionResult, 0),
+		}
+
+		for _, jsonQ := range jsonSection.Questions {
+			question := QuestionResult{
+				ID:            jsonQ.ID,
+				Question:      jsonQ.Question,
+				Description:   jsonQ.Description,
+				Options:       jsonQ.Options,
+				CorrectAnswer: jsonQ.CorrectAnswer,
+			}
+
+			// Check if student answered this question
+			if answer, exists := answersMap[jsonQ.ID]; exists {
+				question.SelectedAnswer = &answer.SelectedOption
+				question.IsCorrect = &answer.IsCorrect
+				question.TimeTakenSeconds = &answer.TimeTaken
+			} else {
+				// Not answered - leave as null
+				question.SelectedAnswer = nil
+				question.IsCorrect = nil
+				question.TimeTakenSeconds = nil
+			}
+
+			section.Questions = append(section.Questions, question)
+		}
+
+		sections = append(sections, section)
+	}
+
+	// Step 6: Return complete result
+	return c.Status(fiber.StatusOK).JSON(GetResultResponse{
+		Success: true,
+		Student: &StudentInfo{
+			Name:  studentName,
+			Email: req.Email,
+		},
+		Session: &SessionInfo{
+			Score:                  score,
+			TotalTimeTakenSeconds:  totalTimeTaken,
+			TotalQuestionsAnswered: answeredCount,
+			Completed:              completed,
+		},
+		Sections: sections,
 	})
 }

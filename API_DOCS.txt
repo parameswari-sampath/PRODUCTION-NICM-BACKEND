@@ -411,6 +411,83 @@ LIVE API ENDPOINTS
    - Returns final score, total time taken, and questions answered
    - Once completed, session cannot submit more answers
 
+22. GET RESULT
+   POST /api/live/result
+   Body: {
+     "email": "student@example.com"
+   }
+
+   Response (success - 200 OK): {
+     "success": true,
+     "student": {
+       "name": "John Doe",
+       "email": "student@example.com"
+     },
+     "session": {
+       "score": 85,
+       "total_time_taken_seconds": 3600,
+       "total_questions_answered": 115,
+       "completed": true
+     },
+     "sections": [
+       {
+         "id": 1,
+         "name": "Section 1",
+         "time_limit": 900,
+         "questions": [
+           {
+             "id": 1,
+             "question": "The first cooperative society was established in which country?",
+             "description": "General Cooperative Concepts & Evolution",
+             "options": ["England", "France", "Germany", "USA"],
+             "correctAnswer": 0,
+             "selected_answer": 0,
+             "is_correct": true,
+             "time_taken_seconds": 45
+           },
+           {
+             "id": 2,
+             "question": "...",
+             "description": "...",
+             "options": [...],
+             "correctAnswer": 3,
+             "selected_answer": null,
+             "is_correct": null,
+             "time_taken_seconds": null
+           }
+         ]
+       }
+     ]
+   }
+
+   Response (failure - 400 Bad Request): {
+     "success": false,
+     "message": "Invalid request body" / "Email is required"
+   }
+
+   Response (failure - 404 Not Found): {
+     "success": false,
+     "message": "Student not found" / "No session found for this student"
+   }
+
+   Response (failure - 500 Internal Server Error): {
+     "success": false,
+     "message": "Failed to fetch answers" / "Failed to load questions" / "Failed to parse questions"
+   }
+
+   Notes:
+   - Frontend sends student's email address
+   - Backend validates email exists in students table
+   - Fetches session data (score, time, completion status)
+   - Fetches all student's answers from answers table
+   - Loads questions_with_timer.json file
+   - Merges student's answers into complete question structure
+   - Questions not answered have null values for selected_answer, is_correct, time_taken_seconds
+   - Returns complete result with all 120 questions across 4 sections
+   - Each question shows: question text, options, correct answer, student's answer (if any)
+   - One session per student - returns that student's single session result
+   - Loads questions from questions_with_timer.json in project root
+
 ===========================================
 HEALTH CHECK
 ===========================================

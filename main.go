@@ -94,6 +94,10 @@ func main() {
 	liveAPI.Post("/start-session", live.StartSessionHandler)
 	liveAPI.Post("/submit-answer", live.SubmitAnswerHandler)
 	liveAPI.Post("/end-session", live.EndSessionHandler)
+	liveAPI.Post("/result", live.GetResultHandler)
+
+	// Serve static files
+	app.Static("/", "./public")
 
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {
