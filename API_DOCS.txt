@@ -321,6 +321,96 @@ LIVE API ENDPOINTS
    - Returns 201 Created on success, 404 if token invalid
    - This marks the official start time of the test session
 
+20. SUBMIT ANSWER
+   POST /api/live/submit-answer
+   Body: {
+     "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4",
+     "question_id": 1,
+     "selected_option_index": 2,
+     "is_correct": true,
+     "time_taken_seconds": 45
+   }
+
+   Response (success - 201 Created): {
+     "success": true,
+     "message": "Answer submitted successfully"
+   }
+
+   Response (failure - 400 Bad Request): {
+     "success": false,
+     "message": "Invalid request body" / "Session token is required" / "Invalid question ID (must be 1-120)" / "Invalid option index (must be 0-3)" / "Invalid time taken"
+   }
+
+   Response (failure - 404 Not Found): {
+     "success": false,
+     "message": "Invalid session token"
+   }
+
+   Response (failure - 403 Forbidden): {
+     "success": false,
+     "message": "Test already completed"
+   }
+
+   Response (failure - 409 Conflict): {
+     "success": false,
+     "message": "Answer already submitted for this question"
+   }
+
+   Notes:
+   - Frontend sends session_token, question_id (1-120), selected option index (0-3), correctness, and time taken
+   - Backend validates session exists and test not completed
+   - Prevents duplicate answers for same question
+   - Stores answer with is_correct flag and time_taken_seconds
+   - All answers linked to session via session_id
+
+21. END SESSION
+   POST /api/live/end-session
+   Body: {
+     "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4"
+   }
+
+   Response (success - 200 OK): {
+     "success": true,
+     "message": "Test completed successfully",
+     "score": 85,
+     "total_time_taken_seconds": 3600,
+     "total_questions_answered": 120
+   }
+
+   Response (failure - 400 Bad Request): {
+     "success": false,
+     "message": "Invalid request body" / "Session token is required"
+   }
+
+   Response (failure - 404 Not Found): {
+     "success": false,
+     "message": "Invalid session token"
+   }
+
+   Response (failure - 409 Conflict): {
+     "success": false,
+     "message": "Test already completed"
+   }
+
+   Response (failure - 500 Internal Server Error): {
+     "success": false,
+     "message": "Failed to calculate score" / "Failed to calculate total time" / "Failed to count questions answered" / "Failed to end session"
+   }
+
+   Notes:
+   - Frontend sends session_token when student finishes the test
+   - Backend validates session exists and test not already completed
+   - Calculates total score (count of correct answers from answers table)
+   - Calculates total time taken (sum of time_taken_seconds from all answers)
+   - Counts total questions answered
+   - Updates sessions table:
+     * completed = true
+     * completed_at = NOW()
+     * score = calculated score
+     * total_time_taken_seconds = sum of answer times
+   - Returns final score, total time taken, and questions answered
+   - Once completed, session cannot submit more answers
+
 ===========================================
 HEALTH CHECK
 ===========================================

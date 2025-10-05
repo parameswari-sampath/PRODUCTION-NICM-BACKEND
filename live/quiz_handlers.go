@@ -22,6 +22,18 @@ type SubmitAnswerResponse struct {
 	Message string `json:"message"`
 }
 
+type EndSessionRequest struct {
+	SessionToken string `json:"session_token"`
+}
+
+type EndSessionResponse struct {
+	Success            bool   `json:"success"`
+	Message            string `json:"message"`
+	Score              *int   `json:"score,omitempty"`
+	TotalTimeTaken     *int   `json:"total_time_taken_seconds,omitempty"`
+	TotalQuestions     *int   `json:"total_questions_answered,omitempty"`
+}
+
 // SubmitAnswerHandler handles POST /api/live/submit-answer
 func SubmitAnswerHandler(c *fiber.Ctx) error {
 	var req SubmitAnswerRequest
@@ -118,5 +130,129 @@ func SubmitAnswerHandler(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(SubmitAnswerResponse{
 		Success: true,
 		Message: "Answer submitted successfully",
+	})
+}
+
+// EndSessionHandler handles POST /api/live/end-session
+func EndSessionHandler(c *fiber.Ctx) error {
+	var req EndSessionRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(EndSessionResponse{
+			Success: false,
+			Message: "Invalid request body",
+		})
+	}
+
+	// Validate required fields
+	if req.SessionToken == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(EndSessionResponse{
+			Success: false,
+			Message: "Session token is required",
+		})
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Step 1: Validate session token and get session_id and started_at
+	var sessionID int
+	var completed bool
+	var startedAt time.Time
+	sessionQuery := `
+		SELECT id, completed, started_at
+		FROM sessions
+		WHERE session_token = $1
+	`
+	err := db.Pool.QueryRow(ctx, sessionQuery, req.SessionToken).Scan(&sessionID, &completed, &startedAt)
+	if err != nil {
+		log.Printf("Session validation failed: %v", err)
+		return c.Status(fiber.StatusNotFound).JSON(EndSessionResponse{
+			Success: false,
+			Message: "Invalid session token",
+		})
+	}
+
+	// Step 2: Check if test is already completed
+	if completed {
+		return c.Status(fiber.StatusConflict).JSON(EndSessionResponse{
+			Success: false,
+			Message: "Test already completed",
+		})
+	}
+
+	// Step 3: Calculate total score (count of correct answers)
+	var score int
+	scoreQuery := `
+		SELECT COUNT(*)
+		FROM answers
+		WHERE session_id = $1 AND is_correct = true
+	`
+	err = db.Pool.QueryRow(ctx, scoreQuery, sessionID).Scan(&score)
+	if err != nil {
+		log.Printf("Failed to calculate score: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(EndSessionResponse{
+			Success: false,
+			Message: "Failed to calculate score",
+		})
+	}
+
+	// Step 4: Calculate total time taken (sum of all answer times)
+	var totalTimeTaken int
+	timeQuery := `
+		SELECT COALESCE(SUM(time_taken_seconds), 0)
+		FROM answers
+		WHERE session_id = $1
+	`
+	err = db.Pool.QueryRow(ctx, timeQuery, sessionID).Scan(&totalTimeTaken)
+	if err != nil {
+		log.Printf("Failed to calculate total time: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(EndSessionResponse{
+			Success: false,
+			Message: "Failed to calculate total time",
+		})
+	}
+
+	// Step 5: Get total questions answered
+	var totalQuestions int
+	countQuery := `
+		SELECT COUNT(*)
+		FROM answers
+		WHERE session_id = $1
+	`
+	err = db.Pool.QueryRow(ctx, countQuery, sessionID).Scan(&totalQuestions)
+	if err != nil {
+		log.Printf("Failed to count questions: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(EndSessionResponse{
+			Success: false,
+			Message: "Failed to count questions answered",
+		})
+	}
+
+	// Step 6: Update session with completion data
+	updateQuery := `
+		UPDATE sessions
+		SET completed = true,
+		    completed_at = NOW(),
+		    score = $1,
+		    total_time_taken_seconds = $2,
+		    updated_at = NOW()
+		WHERE id = $3
+	`
+	_, err = db.Pool.Exec(ctx, updateQuery, score, totalTimeTaken, sessionID)
+	if err != nil {
+		log.Printf("Failed to update session: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(EndSessionResponse{
+			Success: false,
+			Message: "Failed to end session",
+		})
+	}
+
+	// Step 7: Return success with results
+	return c.Status(fiber.StatusOK).JSON(EndSessionResponse{
+		Success:        true,
+		Message:        "Test completed successfully",
+		Score:          &score,
+		TotalTimeTaken: &totalTimeTaken,
+		TotalQuestions: &totalQuestions,
 	})
 }

@@ -93,6 +93,7 @@ func main() {
 	liveAPI.Post("/verify-otp", live.VerifyOTPHandler)
 	liveAPI.Post("/start-session", live.StartSessionHandler)
 	liveAPI.Post("/submit-answer", live.SubmitAnswerHandler)
+	liveAPI.Post("/end-session", live.EndSessionHandler)
 
 	// Health check
 	app.Get("/health", func(c *fiber.Ctx) error {
