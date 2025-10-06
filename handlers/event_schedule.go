@@ -76,9 +76,9 @@ func CreateEventScheduleHandler(c *fiber.Ctx) error {
 		"message":               "Schedule created successfully",
 		"schedule_id":           scheduleID,
 		"first_function":        firstFunction,
-		"first_scheduled_time":  firstTime,
+		"first_scheduled_time":  firstTime.In(istLocation).Format("2006-01-02T15:04:05 IST"),
 		"second_function":       secondFunction,
-		"second_scheduled_time": secondTime,
+		"second_scheduled_time": secondTime.In(istLocation).Format("2006-01-02T15:04:05 IST"),
 		"video_url":             req.VideoURL,
 	})
 }
@@ -89,10 +89,17 @@ func GetEventScheduleHandler(c *fiber.Ctx) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
+	// Load IST timezone
+	istLocation, err := time.LoadLocation("Asia/Kolkata")
+	if err != nil {
+		log.Printf("Failed to load IST timezone: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Server timezone error"})
+	}
+
 	query := `
 		SELECT id, first_function, first_scheduled_time, first_executed, first_executed_at,
 		       second_function, second_scheduled_time, second_executed, second_executed_at,
-		       created_at
+		       created_at, video_url
 		FROM event_schedule
 		ORDER BY id DESC
 		LIMIT 1
@@ -109,9 +116,10 @@ func GetEventScheduleHandler(c *fiber.Ctx) error {
 		SecondExecuted      bool       `json:"second_executed"`
 		SecondExecutedAt    *time.Time `json:"second_executed_at"`
 		CreatedAt           time.Time  `json:"created_at"`
+		VideoURL            string     `json:"video_url"`
 	}
 
-	err := db.Pool.QueryRow(ctx, query).Scan(
+	err = db.Pool.QueryRow(ctx, query).Scan(
 		&schedule.ID,
 		&schedule.FirstFunction,
 		&schedule.FirstScheduledTime,
@@ -122,11 +130,34 @@ func GetEventScheduleHandler(c *fiber.Ctx) error {
 		&schedule.SecondExecuted,
 		&schedule.SecondExecutedAt,
 		&schedule.CreatedAt,
+		&schedule.VideoURL,
 	)
 
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "No schedule found"})
 	}
 
-	return c.JSON(schedule)
+	// Helper function to format nullable time
+	formatTimeIST := func(t *time.Time) *string {
+		if t == nil {
+			return nil
+		}
+		formatted := t.In(istLocation).Format("2006-01-02T15:04:05 IST")
+		return &formatted
+	}
+
+	// Return schedule with all times converted to IST
+	return c.JSON(fiber.Map{
+		"id":                    schedule.ID,
+		"first_function":        schedule.FirstFunction,
+		"first_scheduled_time":  schedule.FirstScheduledTime.In(istLocation).Format("2006-01-02T15:04:05 IST"),
+		"first_executed":        schedule.FirstExecuted,
+		"first_executed_at":     formatTimeIST(schedule.FirstExecutedAt),
+		"second_function":       schedule.SecondFunction,
+		"second_scheduled_time": schedule.SecondScheduledTime.In(istLocation).Format("2006-01-02T15:04:05 IST"),
+		"second_executed":       schedule.SecondExecuted,
+		"second_executed_at":    formatTimeIST(schedule.SecondExecutedAt),
+		"created_at":            schedule.CreatedAt.In(istLocation).Format("2006-01-02T15:04:05 IST"),
+		"video_url":             schedule.VideoURL,
+	})
 }

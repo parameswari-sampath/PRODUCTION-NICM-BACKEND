@@ -27,7 +27,8 @@ func checkAndExecuteSchedules() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	now := time.Now()
+	// Use UTC for comparison (database stores times in UTC)
+	now := time.Now().UTC()
 
 	// Check for first function to execute
 	query := `
