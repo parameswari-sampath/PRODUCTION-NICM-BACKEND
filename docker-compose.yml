@@ -1,0 +1,97 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: smartmcq-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-smartmcq}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    networks:
+      - nginx-proxy
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Your Go backend application
+  backend:
+    build: .
+    container_name: smartmcq-backend
+    restart: unless-stopped
+    environment:
+      # Database connection (use internal Docker network)
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-smartmcq}?sslmode=disable
+      - ZEPTO_API_KEY=${ZEPTO_API_KEY}
+      - ZEPTO_FROM_EMAIL=${ZEPTO_FROM_EMAIL}
+      - ZEPTO_FROM_NAME=${ZEPTO_FROM_NAME}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - BASE_URL=${BASE_URL}
+      # Required for nginx-proxy
+      - VIRTUAL_HOST=api.smart-mcq.com
+      - VIRTUAL_PORT=8080
+      # Required for Let's Encrypt SSL
+      - LETSENCRYPT_HOST=api.smart-mcq.com
+      - LETSENCRYPT_EMAIL=dharanigowthamsampath@gmail.com
+    expose:
+      - "8080"
+    networks:
+      - nginx-proxy
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Nginx reverse proxy with automatic SSL
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy:latest
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - nginx-certs:/etc/nginx/certs:ro
+      - nginx-vhost:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - ./nginx-custom.conf:/etc/nginx/conf.d/custom.conf:ro
+    networks:
+      - nginx-proxy
+    labels:
+      - "com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy"
+
+  # Let's Encrypt companion for automatic SSL certificates
+  acme-companion:
+    image: nginxproxy/acme-companion:latest
+    container_name: acme-companion
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nginx-certs:/etc/nginx/certs
+      - nginx-vhost:/etc/nginx/vhost.d
+      - nginx-html:/usr/share/nginx/html
+      - acme-state:/etc/acme.sh
+    environment:
+      - DEFAULT_EMAIL=dharanigowthamsampath@gmail.com
+    networks:
+      - nginx-proxy
+    depends_on:
+      - nginx-proxy
+
+networks:
+  nginx-proxy:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  nginx-certs:
+  nginx-vhost:
+  nginx-html:
+  acme-state:

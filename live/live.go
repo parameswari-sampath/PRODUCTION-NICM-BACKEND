@@ -54,7 +54,7 @@ func sendFirstMail(userId int, token string) error {
 	// Get frontend URL from environment
 	frontendURL := os.Getenv("FRONTEND_URL")
 	if frontendURL == "" {
-		frontendURL = "http://localhost:3000"
+		frontendURL = "https://nicm.smart-mcq.com"
 	}
 
 	// Create conference link with token
@@ -318,7 +318,7 @@ func sendSecondMail(userId int, token string) error {
 	// Get frontend URL from environment
 	frontendURL := os.Getenv("FRONTEND_URL")
 	if frontendURL == "" {
-		frontendURL = "http://localhost:3000"
+		frontendURL = "https://nicm.smart-mcq.com"
 	}
 
 	// Create URL with otp parameter

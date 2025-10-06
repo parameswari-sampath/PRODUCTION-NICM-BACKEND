@@ -50,7 +50,7 @@ func SendFirstEmailToAll() {
 
 	frontendURL := os.Getenv("FRONTEND_URL")
 	if frontendURL == "" {
-		frontendURL = "http://localhost:3000"
+		frontendURL = "https://nicm.smart-mcq.com"
 	}
 
 	sentCount := 0
@@ -162,7 +162,7 @@ func SendSecondEmailToEligible() {
 
 	frontendURL := os.Getenv("FRONTEND_URL")
 	if frontendURL == "" {
-		frontendURL = "http://localhost:3000"
+		frontendURL = "https://nicm.smart-mcq.com"
 	}
 
 	sentCount := 0

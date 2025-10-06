@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Exam Result</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .email-form {
+            padding: 30px;
+            text-align: center;
+            background: #f8f9fa;
+        }
+
+        .email-form input {
+            padding: 12px 20px;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            margin-right: 10px;
+        }
+
+        .email-form button {
+            padding: 12px 30px;
+            font-size: 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .email-form button:hover {
+            background: #5568d3;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #667eea;
+        }
+
+        .error {
+            display: none;
+            background: #fee;
+            color: #c33;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .result-container {
+            display: none;
+        }
+
+        .student-info {
+            background: #f8f9fa;
+            padding: 25px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .student-info h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .student-info p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .session-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 25px;
+            background: white;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-card h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .summary-card p {
+            opacity: 0.9;
+        }
+
+        .download-btn {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+
+        .section {
+            margin: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .question {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question:last-child {
+            border-bottom: none;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-number {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .question-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .options {
+            margin: 15px 0;
+        }
+
+        .option {
+            padding: 10px 15px;
+            margin: 8px 0;
+            border-radius: 5px;
+            background: #f8f9fa;
+            border-left: 4px solid #ddd;
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+
+        .option.incorrect {
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+
+        .option.selected {
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-skipped {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .time-taken {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MCQ Exam Result Report</h1>
+            <p>View your complete examination results</p>
+        </div>
+
+        <div class="email-form" id="emailForm">
+            <h3 style="margin-bottom: 20px; color: #333;">Enter Your Email to View Results</h3>
+            <input type="email" id="emailInput" placeholder="Enter your registered email" required>
+            <button onclick="fetchResults()">Get Results</button>
+        </div>
+
+        <div class="loading" id="loading">
+            <p>Loading your results...</p>
+        </div>
+
+        <div class="error" id="error"></div>
+
+        <div class="result-container" id="resultContainer">
+            <div class="student-info" id="studentInfo"></div>
+
+            <div class="session-summary" id="sessionSummary"></div>
+
+            <button class="download-btn" onclick="downloadPDF()">Download as PDF</button>
+
+            <div id="sections"></div>
+        </div>
+    </div>
+
+    <script>
+        let resultData = null;
+
+        async function fetchResults() {
+            const email = document.getElementById('emailInput').value.trim();
+
+            if (!email) {
+                showError('Please enter your email address');
+                return;
+            }
+
+            document.getElementById('emailForm').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'none';
+
+            try {
+                const response = await fetch('/api/live/result', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.message || 'Failed to fetch results');
+                }
+
+                resultData = data;
+                displayResults(data);
+            } catch (error) {
+                showError(error.message);
+                document.getElementById('emailForm').style.display = 'block';
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        function displayResults(data) {
+            // Student Info
+            document.getElementById('studentInfo').innerHTML = `
+                <h2>${data.student.name}</h2>
+                <p>📧 ${data.student.email}</p>
+            `;
+
+            // Session Summary
+            const minutes = Math.floor(data.session.total_time_taken_seconds / 60);
+            const seconds = data.session.total_time_taken_seconds % 60;
+
+            document.getElementById('sessionSummary').innerHTML = `
+                <div class="summary-card">
+                    <h3>${data.session.score}</h3>
+                    <p>Score</p>
+                </div>
+                <div class="summary-card">
+                    <h3>${data.session.total_questions_answered}</h3>
+                    <p>Questions Answered</p>
+                </div>
+                <div class="summary-card">
+                    <h3>${minutes}m ${seconds}s</h3>
+                    <p>Total Time</p>
+                </div>
+                <div class="summary-card">
+                    <h3>${data.session.completed ? '✓' : '✗'}</h3>
+                    <p>${data.session.completed ? 'Completed' : 'Incomplete'}</p>
+                </div>
+            `;
+
+            // Sections and Questions
+            let sectionsHTML = '';
+            data.sections.forEach(section => {
+                sectionsHTML += `
+                    <div class="section">
+                        <div class="section-header">${section.name} (Time Limit: ${section.time_limit / 60} minutes)</div>
+                        ${section.questions.map(q => renderQuestion(q)).join('')}
+                    </div>
+                `;
+            });
+
+            document.getElementById('sections').innerHTML = sectionsHTML;
+            document.getElementById('resultContainer').style.display = 'block';
+        }
+
+        function renderQuestion(q) {
+            const isAnswered = q.selected_answer !== null;
+            const isCorrect = q.is_correct;
+
+            let statusBadge = '';
+            if (!isAnswered) {
+                statusBadge = '<span class="status-badge status-skipped">Not Answered</span>';
+            } else if (isCorrect) {
+                statusBadge = '<span class="status-badge status-correct">✓ Correct</span>';
+            } else {
+                statusBadge = '<span class="status-badge status-incorrect">✗ Incorrect</span>';
+            }
+
+            const timeTaken = q.time_taken_seconds !== null
+                ? `<span class="time-taken">⏱ ${q.time_taken_seconds}s</span>`
+                : '';
+
+            const optionsHTML = q.options.map((option, index) => {
+                const isCorrectOption = index === q.correctAnswer;
+                const isSelectedOption = index === q.selected_answer;
+
+                let className = 'option';
+                if (isCorrectOption) className += ' correct';
+                if (isSelectedOption && !isCorrect) className += ' incorrect';
+                if (isSelectedOption) className += ' selected';
+
+                let label = option;
+                if (isCorrectOption) label += ' ✓ (Correct Answer)';
+                if (isSelectedOption) label += ' (Your Answer)';
+
+                return `<div class="${className}">${label}</div>`;
+            }).join('');
+
+            return `
+                <div class="question">
+                    <div class="question-header">
+                        <span class="question-number">Q${q.id}</span>
+                        <div>
+                            ${statusBadge}
+                            ${timeTaken}
+                        </div>
+                    </div>
+                    <div class="question-text">${q.question}</div>
+                    <div class="question-desc">${q.description}</div>
+                    <div class="options">${optionsHTML}</div>
+                </div>
+            `;
+        }
+
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            let yPos = 20;
+            const lineHeight = 7;
+            const pageHeight = doc.internal.pageSize.height;
+            const marginBottom = 20;
+
+            // Title
+            doc.setFontSize(20);
+            doc.text('MCQ Exam Result Report', 105, yPos, { align: 'center' });
+            yPos += 15;
+
+            // Student Info
+            doc.setFontSize(14);
+            doc.text(`Student: ${resultData.student.name}`, 20, yPos);
+            yPos += lineHeight;
+            doc.setFontSize(12);
+            doc.text(`Email: ${resultData.student.email}`, 20, yPos);
+            yPos += lineHeight * 2;
+
+            // Summary
+            const minutes = Math.floor(resultData.session.total_time_taken_seconds / 60);
+            const seconds = resultData.session.total_time_taken_seconds % 60;
+            doc.text(`Score: ${resultData.session.score} | Questions Answered: ${resultData.session.total_questions_answered} | Time: ${minutes}m ${seconds}s`, 20, yPos);
+            yPos += lineHeight * 2;
+
+            // Questions
+            resultData.sections.forEach(section => {
+                doc.setFontSize(14);
+                doc.setFont(undefined, 'bold');
+                doc.text(section.name, 20, yPos);
+                yPos += lineHeight;
+                doc.setFont(undefined, 'normal');
+
+                section.questions.forEach(q => {
+                    if (yPos > pageHeight - marginBottom) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+
+                    doc.setFontSize(11);
+                    doc.text(`Q${q.id}. ${q.question}`, 20, yPos, { maxWidth: 170 });
+                    yPos += lineHeight;
+
+                    const isAnswered = q.selected_answer !== null;
+                    const status = !isAnswered ? 'Not Answered' : (q.is_correct ? 'Correct' : 'Incorrect');
+                    const correctAns = q.options[q.correctAnswer];
+                    const selectedAns = isAnswered ? q.options[q.selected_answer] : 'N/A';
+
+                    doc.setFontSize(10);
+                    doc.text(`Correct: ${correctAns} | Your Answer: ${selectedAns} | Status: ${status}`, 25, yPos);
+                    yPos += lineHeight * 1.5;
+                });
+
+                yPos += lineHeight;
+            });
+
+            doc.save(`MCQ_Result_${resultData.student.name}.pdf`);
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('emailInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                fetchResults();
+            }
+        });
+    </script>
+</body>
+</html>
