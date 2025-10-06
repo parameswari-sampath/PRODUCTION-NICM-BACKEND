@@ -96,6 +96,17 @@ func main() {
 	liveAPI.Post("/end-session", live.EndSessionHandler)
 	liveAPI.Post("/result", live.GetResultHandler)
 
+	// Load test endpoints (isolated)
+	loadTest := api.Group("/load-test")
+	loadTest.Post("/individual", handlers.LoadTestIndividualHandler)
+	loadTest.Post("/batch", handlers.LoadTestBatchHandler)
+	loadTest.Get("/metrics/individual", handlers.GetIndividualMetricsHandler)
+	loadTest.Get("/metrics/batch", handlers.GetBatchMetricsHandler)
+	loadTest.Post("/metrics/reset", handlers.ResetLoadTestMetricsHandler)
+	loadTest.Delete("/cleanup", handlers.CleanupLoadTestDataHandler)
+	loadTest.Post("/results/save", handlers.SaveTestResultsHandler)
+	loadTest.Get("/results", handlers.GetAllTestResultsHandler)
+
 	// Serve static files
 	app.Static("/", "./public")
 
