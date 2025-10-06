@@ -63,7 +63,7 @@ func sendFirstMail(userId int, token string) error {
 	// Email body
 	htmlBody := fmt.Sprintf(`
 		<div style="font-family: Arial, sans-serif; max-width: 700px; margin: 0 auto; padding: 20px;">
-			<h2 style="color: #2c3e50;">Invitation to the Inaugural Virtual Meeting – International Online Quiz on Cooperatives</h2>
+			<h2 style="color: #2c3e50;">Invitation to the Inaugural Virtual Meeting – CoopQuest - An International Online Cooperative Conclave</h2>
 
 			<p>Dear %s,</p>
 
@@ -83,7 +83,7 @@ func sendFirstMail(userId int, token string) error {
 			<h3 style="color: #2c3e50;">Important Instructions for Participants:</h3>
 			<ul style="line-height: 1.8;">
 				<li>At the end of this inaugural session, you will receive your link for the International Online Quiz.</li>
-				<li>The quiz will be conducted between <strong>2:30 PM and 3:30 PM</strong> (your local time).</li>
+				<li>The quiz will be conducted between <strong>3:00 PM and 3:50 PM</strong> (your local time).</li>
 				<li>Upon completion, you can view your responses, the correct answers, and your overall score.</li>
 				<li>All participants will receive a <strong>Participation Certificate</strong>.</li>
 				<li>The <strong>Top 10 scorers</strong> will be awarded <strong>Merit Certificates</strong>.</li>
@@ -108,7 +108,7 @@ func sendFirstMail(userId int, token string) error {
 	params := utils.SendEmailParams{
 		ToEmail:  email,
 		ToName:   name,
-		Subject:  "Invitation to the Inaugural Virtual Meeting – International Online Quiz on Cooperatives",
+		Subject:  "Invitation: CoopQuest- An International Online Cooperative  Conclave",
 		HTMLBody: htmlBody,
 	}
 
