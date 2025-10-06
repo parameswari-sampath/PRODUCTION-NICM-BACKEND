@@ -2,7 +2,7 @@
   {
     "id": 1,
     "name": "Section 1",
-    "time_limit": 900,
+    "time_limit": 750,
     "questions": [
       {
         "id": 1,
@@ -304,7 +304,7 @@
   {
     "id": 2,
     "name": "Section 2",
-    "time_limit": 900,
+    "time_limit": 750,
     "questions": [
       {
         "id": 31,
@@ -551,7 +551,7 @@
   {
     "id": 3,
     "name": "Section 3",
-    "time_limit": 900,
+    "time_limit": 750,
     "questions": [
       {
         "id": 61,
@@ -813,7 +813,7 @@
   {
     "id": 4,
     "name": "Section 4",
-    "time_limit": 900,
+    "time_limit": 750,
     "questions": [
       {
         "id": 91,

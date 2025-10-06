@@ -489,6 +489,158 @@ LIVE API ENDPOINTS
    - Loads questions from questions_with_timer.json in project root
 
 ===========================================
+LEADERBOARD ENDPOINTS
+===========================================
+
+23. GET OVERALL LEADERBOARD (Top 100)
+   GET /api/leaderboard/overall
+
+   Response (success - 200 OK): {
+     "success": true,
+     "total": 1234,
+     "data": [
+       {
+         "rank": 1,
+         "student_id": 123,
+         "name": "John Doe",
+         "email": "john@example.com",
+         "score": 118,
+         "total_time_taken_seconds": 3200
+       },
+       {
+         "rank": 2,
+         "student_id": 456,
+         "name": "Jane Smith",
+         "email": "jane@example.com",
+         "score": 118,
+         "total_time_taken_seconds": 3450
+       }
+     ]
+   }
+
+   Notes:
+   - Returns top 100 students ranked by score (DESC) then time (ASC)
+   - Only includes students who completed the test (completed = true)
+   - Ties broken by faster completion time
+   - "total" shows total number of students who completed the test
+   - "data" array limited to 100 entries
+
+24. GET SECTION LEADERBOARD (Top 100 per Section)
+   GET /api/leaderboard/section/:section_id
+
+   Examples:
+   GET /api/leaderboard/section/1  # Section 1 leaderboard
+   GET /api/leaderboard/section/2  # Section 2 leaderboard
+   GET /api/leaderboard/section/3  # Section 3 leaderboard
+   GET /api/leaderboard/section/4  # Section 4 leaderboard
+
+   Response (success - 200 OK): {
+     "success": true,
+     "section_id": 1,
+     "section_name": "Section 1",
+     "total": 1234,
+     "data": [
+       {
+         "rank": 1,
+         "student_id": 123,
+         "name": "John Doe",
+         "email": "john@example.com",
+         "section_score": 28,
+         "section_time_taken_seconds": 720
+       },
+       {
+         "rank": 2,
+         "student_id": 789,
+         "name": "Bob Johnson",
+         "email": "bob@example.com",
+         "section_score": 27,
+         "section_time_taken_seconds": 650
+       }
+     ]
+   }
+
+   Response (failure - 400 Bad Request): {
+     "success": false,
+     "message": "Invalid section ID (must be 1-4)"
+   }
+
+   Response (failure - 404 Not Found): {
+     "success": false,
+     "message": "Section not found"
+   }
+
+   Notes:
+   - Returns top 100 students for a specific section
+   - Section IDs: 1-4 (30 questions each)
+   - Ranked by section_score (DESC) then section_time_taken_seconds (ASC)
+   - Section score = count of correct answers in that section only
+   - Section time = sum of time taken for questions in that section only
+   - Only includes students who completed the test
+   - Ties broken by faster section completion time
+
+25. GET USER SECTION RANKS
+   GET /api/leaderboard/user-sections?email=student@example.com
+
+   Response (success - 200 OK): {
+     "success": true,
+     "student_id": 123,
+     "student_name": "John Doe",
+     "student_email": "student@example.com",
+     "sections": [
+       {
+         "section_id": 1,
+         "section_name": "Section 1",
+         "score": 28,
+         "time_taken_seconds": 720,
+         "rank": 5,
+         "total_participants": 1234
+       },
+       {
+         "section_id": 2,
+         "section_name": "Section 2",
+         "score": 25,
+         "time_taken_seconds": 850,
+         "rank": 12,
+         "total_participants": 1234
+       },
+       {
+         "section_id": 3,
+         "section_name": "Section 3",
+         "score": 30,
+         "time_taken_seconds": 600,
+         "rank": 1,
+         "total_participants": 1234
+       },
+       {
+         "section_id": 4,
+         "section_name": "Section 4",
+         "score": 27,
+         "time_taken_seconds": 780,
+         "rank": 8,
+         "total_participants": 1234
+       }
+     ]
+   }
+
+   Response (failure - 400 Bad Request): {
+     "success": false,
+     "message": "Email parameter is required"
+   }
+
+   Response (failure - 404 Not Found): {
+     "success": false,
+     "message": "Student not found" / "No completed session found for this student"
+   }
+
+   Notes:
+   - Returns the student's rank in each of the 4 sections
+   - Email parameter required in query string
+   - Shows score, time taken, rank, and total participants for each section
+   - Rank calculated based on section-specific scores and times
+   - Only works for students who completed the test
+   - Sections data loaded from questions_with_timer.json
+
+===========================================
 HEALTH CHECK
 ===========================================
 

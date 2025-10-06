@@ -96,6 +96,12 @@ func main() {
 	liveAPI.Post("/end-session", live.EndSessionHandler)
 	liveAPI.Post("/result", live.GetResultHandler)
 
+	// Leaderboard endpoints
+	leaderboard := api.Group("/leaderboard")
+	leaderboard.Get("/overall", handlers.GetOverallLeaderboardHandler)
+	leaderboard.Get("/section/:section_id", handlers.GetSectionLeaderboardHandler)
+	leaderboard.Get("/user-sections", handlers.GetUserSectionRanksHandler)
+
 	// Load test endpoints (isolated)
 	loadTest := api.Group("/load-test")
 	loadTest.Post("/individual", handlers.LoadTestIndividualHandler)
