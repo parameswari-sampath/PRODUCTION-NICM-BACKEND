@@ -195,9 +195,9 @@ func VerifyOTPHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// Calculate time window: second_scheduled_time to second_scheduled_time + 15 minutes
+	// Calculate time window: second_scheduled_time to second_scheduled_time + 50 minutes
 	currentTime := time.Now()
-	testEndTime := secondScheduledTime.Add(15 * time.Minute)
+	testEndTime := secondScheduledTime.Add(50 * time.Minute)
 
 	if currentTime.Before(secondScheduledTime) {
 		return c.Status(fiber.StatusBadRequest).JSON(VerifyOTPResponse{
