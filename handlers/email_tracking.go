@@ -141,3 +141,47 @@ func GetStudentsWhoOpenedHandler(c *fiber.Ctx) error {
 		"students": students,
 	})
 }
+
+// GetStudentsNotAttendedHandler handles GET /api/tracking/not-attended
+// Returns students who did NOT attend the conference (fail-safe mechanism)
+func GetStudentsNotAttendedHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT s.id, s.name, s.email, et.opened, et.opened_at, et.email_type
+		FROM students s
+		LEFT JOIN email_tracking et ON s.id = et.student_id
+		WHERE et.conference_attended = false OR et.conference_attended IS NULL
+		ORDER BY s.id ASC
+	`
+
+	rows, err := db.Pool.Query(ctx, query)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch non-attendees"})
+	}
+	defer rows.Close()
+
+	type NonAttendee struct {
+		StudentID  int        `json:"student_id"`
+		Name       string     `json:"name"`
+		Email      string     `json:"email"`
+		Opened     *bool      `json:"opened"`
+		OpenedAt   *time.Time `json:"opened_at"`
+		EmailType  *string    `json:"email_type"`
+	}
+
+	var students []NonAttendee
+	for rows.Next() {
+		var st NonAttendee
+		if err := rows.Scan(&st.StudentID, &st.Name, &st.Email, &st.Opened, &st.OpenedAt, &st.EmailType); err != nil {
+			continue
+		}
+		students = append(students, st)
+	}
+
+	return c.JSON(fiber.Map{
+		"count":    len(students),
+		"students": students,
+	})
+}

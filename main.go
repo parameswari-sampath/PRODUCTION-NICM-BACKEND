@@ -66,6 +66,7 @@ func main() {
 	mail := api.Group("/mail")
 	mail.Post("/send", handlers.SendEmailHandler)
 	mail.Post("/send-all", handlers.SendAllEmailsHandler)
+	mail.Post("/resend-conference", handlers.ResendConferenceInvitationHandler)
 	mail.Get("/stats", handlers.GetEmailStatsHandler)
 	mail.Get("/search", handlers.SearchEmailHandler)
 	mail.Get("/logs", handlers.GetEmailLogsHandler)
@@ -83,6 +84,7 @@ func main() {
 	api.Get("/track-open", handlers.TrackEmailOpenHandler)
 	tracking := api.Group("/tracking")
 	tracking.Get("/opened-first", handlers.GetStudentsWhoOpenedHandler)
+	tracking.Get("/not-attended", handlers.GetStudentsNotAttendedHandler)
 
 	// Conference token verification
 	api.Post("/verify-token", handlers.VerifyConferenceTokenHandler)
