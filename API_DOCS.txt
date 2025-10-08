@@ -150,11 +150,39 @@ MAIL ENDPOINTS
    - 100ms delay between emails to avoid rate limiting
    - These students will NOT be eligible for second email (test invitation) until they attend
 
+14. RESEND TEST INVITATION (Fail-Safe Mechanism)
+   POST /api/mail/resend-test-invitation
+   No request body required
+
+   Response (success): {
+     "message": "Test invitations resent successfully",
+     "total": 25,
+     "sent": 25
+   }
+
+   Response (no students to resend): {
+     "message": "No students found who need test invitation resend",
+     "total": 0,
+     "sent": 0
+   }
+
+   Notes:
+   - Resends test invitation ONLY to students who attended conference but did NOT start test
+   - Reuses existing access codes (OTP) - no new OTP generation
+   - Same test invitation email template as Phase2SecondMailSending
+   - Only targets students where:
+     * conference_attended = true (verified conference token)
+     * access_code IS NOT NULL (received OTP)
+     * No record in sessions table (never started test)
+   - Uses same email format with OTP link and access code
+   - Useful fail-safe mechanism for students who didn't click the test link
+   - 100ms delay between emails to avoid rate limiting
+
 ===========================================
 EMAIL TRACKING ENDPOINTS
 ===========================================
 
-14. GET STUDENTS WHO DID NOT ATTEND CONFERENCE
+15. GET STUDENTS WHO DID NOT ATTEND CONFERENCE
    GET /api/tracking/not-attended
 
    Response (success - 200 OK): {
@@ -187,7 +215,7 @@ EMAIL TRACKING ENDPOINTS
    - Useful for identifying students who need follow-up
    - Can be used to determine who to resend conference invitations to
 
-15. GET STUDENTS WHO DID NOT START TEST
+16. GET STUDENTS WHO DID NOT START TEST
    GET /api/tracking/not-started-test
 
    Response (success - 200 OK): {
@@ -225,7 +253,7 @@ EMAIL TRACKING ENDPOINTS
 WEBHOOK ENDPOINTS
 ===========================================
 
-16. ZEPTOMAIL WEBHOOK (Bounce Notifications)
+17. ZEPTOMAIL WEBHOOK (Bounce Notifications)
    POST /api/webhooks/zeptomail
    Unauthenticated endpoint for ZeptoMail bounce notifications
 
@@ -241,7 +269,7 @@ WEBHOOK ENDPOINTS
 EVENT SCHEDULING (CRON JOB)
 ===========================================
 
-17. CREATE EVENT SCHEDULE
+18. CREATE EVENT SCHEDULE
    POST /api/event/schedule
    Body: {
      "first_scheduled_time": "2025-10-05T15:30:00",
@@ -277,7 +305,7 @@ EVENT SCHEDULING (CRON JOB)
      * Phase1FirstMailVerification - Sends first email to all students with conference invitation
      * Phase2SecondMailSending - Sends second email to students who verified first email
 
-18. GET EVENT SCHEDULE
+19. GET EVENT SCHEDULE
    GET /api/event/schedule
 
    Response: {
@@ -299,7 +327,7 @@ EVENT SCHEDULING (CRON JOB)
 CONFERENCE TOKEN VERIFICATION
 ===========================================
 
-19. VERIFY CONFERENCE TOKEN
+20. VERIFY CONFERENCE TOKEN
    POST /api/verify-token
    Body: {
      "token": "a1b2c3d4e5f6..."
@@ -327,7 +355,7 @@ CONFERENCE TOKEN VERIFICATION
 LIVE API ENDPOINTS
 ===========================================
 
-20. VERIFY FIRST MAIL TOKEN
+21. VERIFY FIRST MAIL TOKEN
    POST /api/live/verify-first-mail
    Body: {
      "token": "a1b2c3d4e5f6..."
@@ -352,7 +380,7 @@ LIVE API ENDPOINTS
    - Returns YouTube video URL from event_schedule table
    - Token can only be used once
 
-21. VERIFY OTP (Access Code)
+22. VERIFY OTP (Access Code)
    POST /api/live/verify-otp
    Body: {
      "otp": "ABC123"
@@ -393,7 +421,7 @@ LIVE API ENDPOINTS
    - Returns session_token (64-character alphanumeric), student email, and student name
    - One-time use: Once session created, same OTP cannot be used again
 
-22. START SESSION
+23. START SESSION
    POST /api/live/start-session
    Body: {
      "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4"
@@ -421,7 +449,7 @@ LIVE API ENDPOINTS
    - Returns 201 Created on success, 404 if token invalid
    - This marks the official start time of the test session
 
-23. SUBMIT ANSWER
+24. SUBMIT ANSWER
    POST /api/live/submit-answer
    Body: {
      "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4",
@@ -463,7 +491,7 @@ LIVE API ENDPOINTS
    - Stores answer with is_correct flag and time_taken_seconds
    - All answers linked to session via session_id
 
-24. END SESSION
+25. END SESSION
    POST /api/live/end-session
    Body: {
      "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4"
@@ -511,7 +539,7 @@ LIVE API ENDPOINTS
    - Returns final score, total time taken, and questions answered
    - Once completed, session cannot submit more answers
 
-25. GET RESULT
+26. GET RESULT
    POST /api/live/result
    Body: {
      "email": "student@example.com"
@@ -592,7 +620,7 @@ LIVE API ENDPOINTS
 LEADERBOARD ENDPOINTS
 ===========================================
 
-26. GET OVERALL LEADERBOARD (Top 100)
+27. GET OVERALL LEADERBOARD (Top 100)
    GET /api/leaderboard/overall
 
    Response (success - 200 OK): {
@@ -625,7 +653,7 @@ LEADERBOARD ENDPOINTS
    - "total" shows total number of students who completed the test
    - "data" array limited to 100 entries
 
-27. GET SECTION LEADERBOARD (Top 100 per Section)
+28. GET SECTION LEADERBOARD (Top 100 per Section)
    GET /api/leaderboard/section/:section_id
 
    Examples:
@@ -678,7 +706,7 @@ LEADERBOARD ENDPOINTS
    - Only includes students who completed the test
    - Ties broken by faster section completion time
 
-28. GET USER SECTION RANKS
+29. GET USER SECTION RANKS
    GET /api/leaderboard/user-sections?email=student@example.com
 
    Response (success - 200 OK): {

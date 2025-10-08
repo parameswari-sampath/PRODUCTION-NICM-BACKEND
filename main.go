@@ -67,6 +67,7 @@ func main() {
 	mail.Post("/send", handlers.SendEmailHandler)
 	mail.Post("/send-all", handlers.SendAllEmailsHandler)
 	mail.Post("/resend-conference", handlers.ResendConferenceInvitationHandler)
+	mail.Post("/resend-test-invitation", handlers.ResendTestInvitationHandler)
 	mail.Get("/stats", handlers.GetEmailStatsHandler)
 	mail.Get("/search", handlers.SearchEmailHandler)
 	mail.Get("/logs", handlers.GetEmailLogsHandler)

@@ -295,3 +295,102 @@ func ResendConferenceInvitationHandler(c *fiber.Ctx) error {
 		"sent":    sentCount,
 	})
 }
+
+// ResendTestInvitationHandler handles POST /api/mail/resend-test-invitation
+// Resends test invitation to students who attended conference but did NOT start test
+// Reuses existing access codes (OTP) - no new code generation
+func ResendTestInvitationHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	// Get students who attended conference but haven't created session
+	query := `
+		SELECT et.student_id, s.name, s.email, et.access_code
+		FROM email_tracking et
+		JOIN students s ON et.student_id = s.id
+		LEFT JOIN sessions sess ON sess.student_id = et.student_id
+		WHERE et.email_type = 'firstMail'
+		  AND et.conference_attended = true
+		  AND et.access_code IS NOT NULL
+		  AND sess.student_id IS NULL
+		ORDER BY et.student_id ASC
+	`
+
+	rows, err := db.Pool.Query(ctx, query)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch students"})
+	}
+	defer rows.Close()
+
+	type StudentWithOTP struct {
+		ID         int
+		Name       string
+		Email      string
+		AccessCode string
+	}
+
+	var students []StudentWithOTP
+	for rows.Next() {
+		var st StudentWithOTP
+		if err := rows.Scan(&st.ID, &st.Name, &st.Email, &st.AccessCode); err != nil {
+			continue
+		}
+		students = append(students, st)
+	}
+
+	if len(students) == 0 {
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{
+			"message": "No students found who need test invitation resend",
+			"total":   0,
+			"sent":    0,
+		})
+	}
+
+	// Get frontend URL from environment
+	frontendURL := os.Getenv("FRONTEND_URL")
+	if frontendURL == "" {
+		frontendURL = "https://nicm.smart-mcq.com"
+	}
+
+	sentCount := 0
+	for _, student := range students {
+		// Create URL with existing OTP parameter
+		testURL := frontendURL + "?otp=" + student.AccessCode
+
+		// Email body - same as Phase 2 second mail template
+		htmlBody := `
+		<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+			<h2>Test Invitation - SmartMCQ</h2>
+			<p>Dear ` + student.Name + `,</p>
+			<p>Thank you for attending the conference!</p>
+			<p>You are now eligible to take the test. Click the link below to start:</p>
+			<p><a href="` + testURL + `" style="background-color: #2196F3; color: white; padding: 14px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">Start Test</a></p>
+			<p>Or use this access code: <strong>` + student.AccessCode + `</strong></p>
+			<p>Best regards,<br>SmartMCQ Team</p>
+		</div>
+		`
+
+		params := utils.SendEmailParams{
+			ToEmail:  student.Email,
+			ToName:   student.Name,
+			Subject:  "Test Invitation - Your Access Code",
+			HTMLBody: htmlBody,
+		}
+
+		_, err := utils.SendEmail(params)
+		if err != nil {
+			log.Printf("Failed to resend test invitation to %s: %v", student.Email, err)
+		} else {
+			sentCount++
+		}
+
+		// Small delay to avoid rate limiting
+		time.Sleep(100 * time.Millisecond)
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Test invitations resent successfully",
+		"total":   len(students),
+		"sent":    sentCount,
+	})
+}
