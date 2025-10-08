@@ -185,3 +185,50 @@ func GetStudentsNotAttendedHandler(c *fiber.Ctx) error {
 		"students": students,
 	})
 }
+
+// GetStudentsNotStartedTestHandler handles GET /api/tracking/not-started-test
+// Returns students who attended conference but did NOT start the test (no session created)
+func GetStudentsNotStartedTestHandler(c *fiber.Ctx) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	query := `
+		SELECT et.student_id, s.name, s.email, et.access_code, et.conference_attended_at
+		FROM email_tracking et
+		JOIN students s ON et.student_id = s.id
+		LEFT JOIN sessions sess ON sess.student_id = et.student_id
+		WHERE et.email_type = 'firstMail'
+		  AND et.conference_attended = true
+		  AND et.access_code IS NOT NULL
+		  AND sess.student_id IS NULL
+		ORDER BY et.student_id ASC
+	`
+
+	rows, err := db.Pool.Query(ctx, query)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to fetch students"})
+	}
+	defer rows.Close()
+
+	type StudentNotStarted struct {
+		StudentID            int       `json:"student_id"`
+		Name                 string    `json:"name"`
+		Email                string    `json:"email"`
+		AccessCode           string    `json:"access_code"`
+		ConferenceAttendedAt time.Time `json:"conference_attended_at"`
+	}
+
+	var students []StudentNotStarted
+	for rows.Next() {
+		var st StudentNotStarted
+		if err := rows.Scan(&st.StudentID, &st.Name, &st.Email, &st.AccessCode, &st.ConferenceAttendedAt); err != nil {
+			continue
+		}
+		students = append(students, st)
+	}
+
+	return c.JSON(fiber.Map{
+		"count":    len(students),
+		"students": students,
+	})
+}

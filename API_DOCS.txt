@@ -187,11 +187,45 @@ EMAIL TRACKING ENDPOINTS
    - Useful for identifying students who need follow-up
    - Can be used to determine who to resend conference invitations to
 
+15. GET STUDENTS WHO DID NOT START TEST
+   GET /api/tracking/not-started-test
+
+   Response (success - 200 OK): {
+     "count": 25,
+     "students": [
+       {
+         "student_id": 123,
+         "name": "John Doe",
+         "email": "john@example.com",
+         "access_code": "ABC123",
+         "conference_attended_at": "2025-10-08T14:30:00Z"
+       },
+       {
+         "student_id": 456,
+         "name": "Jane Smith",
+         "email": "jane@example.com",
+         "access_code": "XYZ789",
+         "conference_attended_at": "2025-10-08T15:00:00Z"
+       }
+     ]
+   }
+
+   Notes:
+   - Returns students who attended the conference BUT did NOT start the test
+   - Filters students where:
+     * conference_attended = true (verified conference token)
+     * access_code IS NOT NULL (received OTP/access code)
+     * No record in sessions table (never created a test session)
+   - Shows when they attended the conference
+   - Includes their access code (OTP) for reference
+   - Useful for identifying students who need test invitation reminder
+   - Can be used to determine who to resend test invitations to
+
 ===========================================
 WEBHOOK ENDPOINTS
 ===========================================
 
-15. ZEPTOMAIL WEBHOOK (Bounce Notifications)
+16. ZEPTOMAIL WEBHOOK (Bounce Notifications)
    POST /api/webhooks/zeptomail
    Unauthenticated endpoint for ZeptoMail bounce notifications
 
@@ -207,7 +241,7 @@ WEBHOOK ENDPOINTS
 EVENT SCHEDULING (CRON JOB)
 ===========================================
 
-16. CREATE EVENT SCHEDULE
+17. CREATE EVENT SCHEDULE
    POST /api/event/schedule
    Body: {
      "first_scheduled_time": "2025-10-05T15:30:00",
@@ -243,7 +277,7 @@ EVENT SCHEDULING (CRON JOB)
      * Phase1FirstMailVerification - Sends first email to all students with conference invitation
      * Phase2SecondMailSending - Sends second email to students who verified first email
 
-17. GET EVENT SCHEDULE
+18. GET EVENT SCHEDULE
    GET /api/event/schedule
 
    Response: {
@@ -265,7 +299,7 @@ EVENT SCHEDULING (CRON JOB)
 CONFERENCE TOKEN VERIFICATION
 ===========================================
 
-18. VERIFY CONFERENCE TOKEN
+19. VERIFY CONFERENCE TOKEN
    POST /api/verify-token
    Body: {
      "token": "a1b2c3d4e5f6..."
@@ -293,7 +327,7 @@ CONFERENCE TOKEN VERIFICATION
 LIVE API ENDPOINTS
 ===========================================
 
-19. VERIFY FIRST MAIL TOKEN
+20. VERIFY FIRST MAIL TOKEN
    POST /api/live/verify-first-mail
    Body: {
      "token": "a1b2c3d4e5f6..."
@@ -318,7 +352,7 @@ LIVE API ENDPOINTS
    - Returns YouTube video URL from event_schedule table
    - Token can only be used once
 
-20. VERIFY OTP (Access Code)
+21. VERIFY OTP (Access Code)
    POST /api/live/verify-otp
    Body: {
      "otp": "ABC123"
@@ -359,7 +393,7 @@ LIVE API ENDPOINTS
    - Returns session_token (64-character alphanumeric), student email, and student name
    - One-time use: Once session created, same OTP cannot be used again
 
-21. START SESSION
+22. START SESSION
    POST /api/live/start-session
    Body: {
      "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4"
@@ -387,7 +421,7 @@ LIVE API ENDPOINTS
    - Returns 201 Created on success, 404 if token invalid
    - This marks the official start time of the test session
 
-22. SUBMIT ANSWER
+23. SUBMIT ANSWER
    POST /api/live/submit-answer
    Body: {
      "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4",
@@ -429,7 +463,7 @@ LIVE API ENDPOINTS
    - Stores answer with is_correct flag and time_taken_seconds
    - All answers linked to session via session_id
 
-23. END SESSION
+24. END SESSION
    POST /api/live/end-session
    Body: {
      "session_token": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6A7B8C9D0E1F2G3H4"
@@ -477,7 +511,7 @@ LIVE API ENDPOINTS
    - Returns final score, total time taken, and questions answered
    - Once completed, session cannot submit more answers
 
-24. GET RESULT
+25. GET RESULT
    POST /api/live/result
    Body: {
      "email": "student@example.com"
@@ -558,7 +592,7 @@ LIVE API ENDPOINTS
 LEADERBOARD ENDPOINTS
 ===========================================
 
-25. GET OVERALL LEADERBOARD (Top 100)
+26. GET OVERALL LEADERBOARD (Top 100)
    GET /api/leaderboard/overall
 
    Response (success - 200 OK): {
@@ -591,7 +625,7 @@ LEADERBOARD ENDPOINTS
    - "total" shows total number of students who completed the test
    - "data" array limited to 100 entries
 
-26. GET SECTION LEADERBOARD (Top 100 per Section)
+27. GET SECTION LEADERBOARD (Top 100 per Section)
    GET /api/leaderboard/section/:section_id
 
    Examples:
@@ -644,7 +678,7 @@ LEADERBOARD ENDPOINTS
    - Only includes students who completed the test
    - Ties broken by faster section completion time
 
-27. GET USER SECTION RANKS
+28. GET USER SECTION RANKS
    GET /api/leaderboard/user-sections?email=student@example.com
 
    Response (success - 200 OK): {

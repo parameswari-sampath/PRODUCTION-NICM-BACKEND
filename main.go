@@ -85,6 +85,7 @@ func main() {
 	tracking := api.Group("/tracking")
 	tracking.Get("/opened-first", handlers.GetStudentsWhoOpenedHandler)
 	tracking.Get("/not-attended", handlers.GetStudentsNotAttendedHandler)
+	tracking.Get("/not-started-test", handlers.GetStudentsNotStartedTestHandler)
 
 	// Conference token verification
 	api.Post("/verify-token", handlers.VerifyConferenceTokenHandler)
