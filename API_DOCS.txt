@@ -706,7 +706,40 @@ LEADERBOARD ENDPOINTS
    - Only includes students who completed the test
    - Ties broken by faster section completion time
 
-29. GET USER SECTION RANKS
+29. GET ALL RESULTS (Ranked by Score and Time)
+   GET /api/results
+
+   Response (success - 200 OK): {
+     "count": 150,
+     "results": [
+       {
+         "email": "student1@example.com",
+         "score": 118,
+         "total_time_taken_seconds": 3200
+       },
+       {
+         "email": "student2@example.com",
+         "score": 118,
+         "total_time_taken_seconds": 3450
+       },
+       {
+         "email": "student3@example.com",
+         "score": 115,
+         "total_time_taken_seconds": 3100
+       }
+     ]
+   }
+
+   Notes:
+   - Returns all students who completed the test
+   - Ranked by score (DESC) then time taken (ASC)
+   - Higher scores appear first
+   - For same score, faster time appears first
+   - Only includes completed sessions (completed = true)
+   - Returns email, score, and total time taken in seconds
+   - JSON format suitable for data export or analysis
+
+30. GET USER SECTION RANKS
    GET /api/leaderboard/user-sections?email=student@example.com
 
    Response (success - 200 OK): {

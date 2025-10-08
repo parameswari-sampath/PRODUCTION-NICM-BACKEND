@@ -106,6 +106,9 @@ func main() {
 	leaderboard.Get("/section/:section_id", handlers.GetSectionLeaderboardHandler)
 	leaderboard.Get("/user-sections", handlers.GetUserSectionRanksHandler)
 
+	// Results endpoints
+	api.Get("/results", handlers.GetAllResultsHandler)
+
 	// Load test endpoints (isolated)
 	loadTest := api.Group("/load-test")
 	loadTest.Post("/individual", handlers.LoadTestIndividualHandler)
