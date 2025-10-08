@@ -94,6 +94,7 @@ func main() {
 	// Live endpoints
 	liveAPI := api.Group("/live")
 	liveAPI.Post("/verify-first-mail", live.VerifyFirstMailTokenHandler)
+	liveAPI.Post("/get-otp", live.GetOTPHandler)
 	liveAPI.Post("/verify-otp", live.VerifyOTPHandler)
 	liveAPI.Post("/start-session", live.StartSessionHandler)
 	liveAPI.Post("/submit-answer", live.SubmitAnswerHandler)

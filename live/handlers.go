@@ -195,9 +195,9 @@ func VerifyOTPHandler(c *fiber.Ctx) error {
 		})
 	}
 
-	// Calculate time window: second_scheduled_time to second_scheduled_time + 50 minutes
+	// Calculate time window: second_scheduled_time to second_scheduled_time + 6 hours
 	currentTime := time.Now()
-	testEndTime := secondScheduledTime.Add(50 * time.Minute)
+	testEndTime := secondScheduledTime.Add(6 * time.Hour)
 
 	if currentTime.Before(secondScheduledTime) {
 		return c.Status(fiber.StatusBadRequest).JSON(VerifyOTPResponse{
@@ -238,6 +238,89 @@ func VerifyOTPHandler(c *fiber.Ctx) error {
 		Email:        email,
 		Name:         name,
 		Message:      "OTP verified successfully",
+	})
+}
+
+type GetOTPRequest struct {
+	Email string `json:"email"`
+}
+
+type GetOTPResponse struct {
+	Success bool   `json:"success"`
+	OTP     string `json:"otp,omitempty"`
+	Message string `json:"message,omitempty"`
+}
+
+// GetOTPHandler handles POST /api/live/get-otp
+func GetOTPHandler(c *fiber.Ctx) error {
+	var req GetOTPRequest
+	if err := c.BodyParser(&req); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(GetOTPResponse{
+			Success: false,
+			Message: "Invalid request body",
+		})
+	}
+
+	if req.Email == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(GetOTPResponse{
+			Success: false,
+			Message: "Email is required",
+		})
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Step 1: Get student ID from email
+	var studentID int
+	studentQuery := `SELECT id FROM students WHERE email = $1`
+	err := db.Pool.QueryRow(ctx, studentQuery, req.Email).Scan(&studentID)
+	if err != nil {
+		log.Printf("Student not found: %v", err)
+		return c.Status(fiber.StatusNotFound).JSON(GetOTPResponse{
+			Success: false,
+			Message: "Student not found with this email",
+		})
+	}
+
+	// Step 2: Get access code from email_tracking
+	var accessCode *string
+	var conferenceAttended bool
+	otpQuery := `
+		SELECT access_code, conference_attended
+		FROM email_tracking
+		WHERE student_id = $1 AND email_type = 'firstMail'
+	`
+	err = db.Pool.QueryRow(ctx, otpQuery, studentID).Scan(&accessCode, &conferenceAttended)
+	if err != nil {
+		log.Printf("Email tracking not found: %v", err)
+		return c.Status(fiber.StatusNotFound).JSON(GetOTPResponse{
+			Success: false,
+			Message: "No OTP generated for this email",
+		})
+	}
+
+	// Step 3: Check if conference was attended
+	if !conferenceAttended {
+		return c.Status(fiber.StatusBadRequest).JSON(GetOTPResponse{
+			Success: false,
+			Message: "Conference not attended. Please verify the first mail token first.",
+		})
+	}
+
+	// Step 4: Check if access code exists
+	if accessCode == nil || *accessCode == "" {
+		return c.Status(fiber.StatusNotFound).JSON(GetOTPResponse{
+			Success: false,
+			Message: "No OTP generated for this email",
+		})
+	}
+
+	// Step 5: Return the OTP
+	return c.JSON(GetOTPResponse{
+		Success: true,
+		OTP:     *accessCode,
+		Message: "OTP retrieved successfully",
 	})
 }
 
