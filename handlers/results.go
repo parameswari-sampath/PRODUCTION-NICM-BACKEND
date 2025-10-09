@@ -239,70 +239,70 @@ func GetComprehensiveStatsHandler(c *fiber.Ctx) error {
 	response["section_leaderboards"] = sectionLeaderboards
 
 	// ============================================
-	// 3. TOTAL ATTENDED CONFERENCE
+	// 3. COMPLETE LIST OF ALL STUDENTS WHO ATTENDED THE TEST
 	// ============================================
-	var totalAttended int
-	attendedQuery := `
-		SELECT COUNT(DISTINCT student_id)
-		FROM email_tracking
-		WHERE conference_attended = true
+
+	type TestAttendee struct {
+		StudentID             int        `json:"student_id"`
+		Name                  string     `json:"name"`
+		Email                 string     `json:"email"`
+		StartedAt             time.Time  `json:"started_at"`
+		Completed             bool       `json:"completed"`
+		CompletedAt           *time.Time `json:"completed_at,omitempty"`
+		Score                 *int       `json:"score,omitempty"`
+		TotalTimeTakenSeconds *int       `json:"total_time_taken_seconds,omitempty"`
+	}
+
+	// Get ALL students who attended the test (both completed and incomplete)
+	allAttendeesQuery := `
+		SELECT s.id, s.name, s.email, sess.started_at, sess.completed, sess.completed_at, sess.score, sess.total_time_taken_seconds
+		FROM sessions sess
+		INNER JOIN students s ON sess.student_id = s.id
+		ORDER BY s.name ASC
 	`
-	err = db.Pool.QueryRow(ctx, attendedQuery).Scan(&totalAttended)
+
+	allAttendeesRows, err := db.Pool.Query(ctx, allAttendeesQuery)
 	if err != nil {
-		log.Printf("Failed to count attended: %v", err)
-		totalAttended = 0
+		log.Printf("Failed to fetch test attendees: %v", err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"success": false,
+			"message": "Failed to fetch test attendees",
+		})
 	}
 
-	response["total_attended_conference"] = totalAttended
+	allAttendees := make([]TestAttendee, 0)
+	completedCount := 0
+	incompleteCount := 0
+
+	for allAttendeesRows.Next() {
+		var student TestAttendee
+		if err := allAttendeesRows.Scan(&student.StudentID, &student.Name, &student.Email, &student.StartedAt, &student.Completed, &student.CompletedAt, &student.Score, &student.TotalTimeTakenSeconds); err != nil {
+			log.Printf("Failed to scan test attendee: %v", err)
+			continue
+		}
+		allAttendees = append(allAttendees, student)
+
+		if student.Completed {
+			completedCount++
+		} else {
+			incompleteCount++
+		}
+	}
+	allAttendeesRows.Close()
+
+	response["test_attendees"] = fiber.Map{
+		"total":    len(allAttendees),
+		"students": allAttendees,
+	}
 
 	// ============================================
-	// 4. COMPLETION STATISTICS
+	// 4. COMPLETION BREAKDOWN
 	// ============================================
 
-	// Total who started test (have a session)
-	var totalStarted int
-	startedQuery := `SELECT COUNT(*) FROM sessions`
-	err = db.Pool.QueryRow(ctx, startedQuery).Scan(&totalStarted)
-	if err != nil {
-		log.Printf("Failed to count started: %v", err)
-		totalStarted = 0
-	}
-
-	// Total who completed test
-	var totalCompleted int
-	completedQuery := `SELECT COUNT(*) FROM sessions WHERE completed = true`
-	err = db.Pool.QueryRow(ctx, completedQuery).Scan(&totalCompleted)
-	if err != nil {
-		log.Printf("Failed to count completed: %v", err)
-		totalCompleted = 0
-	}
-
-	// Total incomplete (started but not completed)
-	totalIncomplete := totalStarted - totalCompleted
-
-	// Total who got access code but never started
-	var totalNeverStarted int
-	neverStartedQuery := `
-		SELECT COUNT(*)
-		FROM email_tracking et
-		WHERE et.conference_attended = true
-		AND et.access_code IS NOT NULL
-		AND NOT EXISTS (
-			SELECT 1 FROM sessions s WHERE s.student_id = et.student_id
-		)
-	`
-	err = db.Pool.QueryRow(ctx, neverStartedQuery).Scan(&totalNeverStarted)
-	if err != nil {
-		log.Printf("Failed to count never started: %v", err)
-		totalNeverStarted = 0
-	}
-
-	response["completion_stats"] = fiber.Map{
-		"total_attended_conference": totalAttended,
-		"total_started_test":        totalStarted,
-		"total_completed_test":      totalCompleted,
-		"total_incomplete_test":     totalIncomplete,
-		"total_never_started":       totalNeverStarted,
+	response["completion_breakdown"] = fiber.Map{
+		"total_attended_test": len(allAttendees),
+		"total_completed":     completedCount,
+		"total_incomplete":    incompleteCount,
 	}
 
 	return c.Status(fiber.StatusOK).JSON(response)
