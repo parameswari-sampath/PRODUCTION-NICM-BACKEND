@@ -802,6 +802,93 @@ LEADERBOARD ENDPOINTS
    - Sections data loaded from questions_with_timer.json
 
 ===========================================
+COMPREHENSIVE STATISTICS
+===========================================
+
+31. GET COMPREHENSIVE STATS (ALL-IN-ONE)
+   GET /api/stats/comprehensive
+
+   Response (success - 200 OK): {
+     "success": true,
+     "top_100_overall": [
+       {
+         "rank": 1,
+         "student_id": 123,
+         "name": "John Doe",
+         "email": "john@example.com",
+         "score": 118,
+         "total_time_taken_seconds": 3200
+       },
+       {
+         "rank": 2,
+         "student_id": 456,
+         "name": "Jane Smith",
+         "email": "jane@example.com",
+         "score": 118,
+         "total_time_taken_seconds": 3450
+       }
+       // ... up to 100 entries
+     ],
+     "section_leaderboards": {
+       "Section 1": {
+         "section_id": 1,
+         "section_name": "Section 1",
+         "total": 1234,
+         "top_100": [
+           {
+             "rank": 1,
+             "student_id": 123,
+             "name": "John Doe",
+             "email": "john@example.com",
+             "section_score": 28,
+             "section_time_taken_seconds": 720
+           }
+           // ... up to 100 entries
+         ]
+       },
+       "Section 2": {
+         "section_id": 2,
+         "section_name": "Section 2",
+         "total": 1234,
+         "top_100": [...]
+       },
+       "Section 3": {
+         "section_id": 3,
+         "section_name": "Section 3",
+         "total": 1234,
+         "top_100": [...]
+       },
+       "Section 4": {
+         "section_id": 4,
+         "section_name": "Section 4",
+         "total": 1234,
+         "top_100": [...]
+       }
+     },
+     "total_attended_conference": 1234,
+     "completion_stats": {
+       "total_attended_conference": 1234,
+       "total_started_test": 850,
+       "total_completed_test": 720,
+       "total_incomplete_test": 130,
+       "total_never_started": 384
+     }
+   }
+
+   Notes:
+   - Single API endpoint that combines all 6 key statistics:
+     1. Top 100 overall ranks (by score DESC, time ASC)
+     2. Section-wise top 100 ranks for all 4 sections
+     3. Total attended conference (verified first email token)
+     4. Total started test (have sessions)
+     5. Total completed test
+     6. Total incomplete test (started but not completed)
+   - Also includes total_never_started (got OTP but never started)
+   - Timeout: 30 seconds (handles multiple queries)
+   - Reduces API calls from 6+ to 1 for complete statistics
+   - Perfect for dashboard/admin overview pages
+
+===========================================
 HEALTH CHECK
 ===========================================
 

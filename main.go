@@ -110,6 +110,10 @@ func main() {
 	// Results endpoints
 	api.Get("/results", handlers.GetAllResultsHandler)
 
+	// Comprehensive stats endpoint (combines all 6 statistics)
+	stats := api.Group("/stats")
+	stats.Get("/comprehensive", handlers.GetComprehensiveStatsHandler)
+
 	// Load test endpoints (isolated)
 	loadTest := api.Group("/load-test")
 	loadTest.Post("/individual", handlers.LoadTestIndividualHandler)
